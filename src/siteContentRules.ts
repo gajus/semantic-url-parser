@@ -156,6 +156,9 @@ export type SiteContentInfo = {
   };
 };
 
+export type Site = SiteContentInfo[keyof SiteContentInfo]['site'];
+export type ContentType = SiteContentInfo[keyof SiteContentInfo]['contentType'];
+
 type SiteContentInfoExtractor<T> = (
   url: URL,
   searchParameters: URLSearchParams,
