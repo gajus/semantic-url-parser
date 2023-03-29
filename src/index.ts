@@ -1,0 +1,1 @@
+export { extractContentInfoFromUrl } from './extractContentInfoFromUrl';
