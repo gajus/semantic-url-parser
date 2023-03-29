@@ -130,6 +130,12 @@ export type SiteContentInfo = {
     url: string;
     videoId: string;
   };
+  YOUTUBE_VIDEO_SHORT_URL: {
+    contentType: 'VIDEO';
+    site: 'YOUTUBE';
+    url: string;
+    videoId: string;
+  };
 };
 
 type SiteContentInfoExtractor<T> = (
@@ -622,6 +628,23 @@ export const siteContentRules: {
       'https://www.youtube.com/watch?v=wE9vSGvzSHg': {
         url: 'https://www.youtube.com/watch?v=wE9vSGvzSHg',
         videoId: 'wE9vSGvzSHg',
+      },
+    },
+    weight: 100,
+  },
+  YOUTUBE_VIDEO_SHORT_URL: {
+    contentType: 'VIDEO',
+    domain: 'youtu.be',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'videoId',
+      /^\/([\w-]+)/u,
+      'https://www.youtube.com/watch?v={{videoId}}',
+    ),
+    site: 'YOUTUBE',
+    tests: {
+      'https://youtu.be/1JppVnu8-pI': {
+        url: 'https://www.youtube.com/watch?v=1JppVnu8-pI',
+        videoId: '1JppVnu8-pI',
       },
     },
     weight: 100,
