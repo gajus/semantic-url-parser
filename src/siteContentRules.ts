@@ -1,6 +1,18 @@
 // cspell:disable
 
 export type SiteContentInfo = {
+  BEHANCE_GALLERY: {
+    contentType: 'GALLERY';
+    galleryId: string;
+    site: 'BEHANCE';
+    url: string;
+  };
+  BEHANCE_PROFILE: {
+    contentType: 'PROFILE';
+    site: 'BEHANCE';
+    url: string;
+    username: string;
+  };
   GOOGLE_DOCS_DOCUMENT: {
     contentType: 'DOCUMENT';
     documentId: string;
@@ -183,6 +195,49 @@ const createIdFromFirstPathnameRegexMatchContentInfoExtractor = <
 export const siteContentRules: {
   [K in keyof SiteContentInfo]: SiteRule<SiteContentInfo[K]>;
 } = {
+  BEHANCE_GALLERY: {
+    contentType: 'GALLERY',
+    domain: 'behance.net',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'galleryId',
+      /^\/gallery\/(\d+)/u,
+      'https://behance.net/gallery/{{galleryId}}/view',
+    ),
+    site: 'BEHANCE',
+    tests: {
+      'https://www.behance.net/gallery/120073067/CITROEN-C5X-Lifestyle': {
+        galleryId: '120073067',
+        url: 'https://behance.net/gallery/120073067/view',
+      },
+    },
+    weight: 100,
+  },
+  BEHANCE_PROFILE: {
+    contentType: 'PROFILE',
+    domain: 'behance.net',
+    extractContentInfo: (url) => {
+      const [, username] = /^\/([a-zA-Z]\w+)$/u.exec(url.pathname) ?? [];
+      const segments = url.pathname.replace(/^\//u, '').split('/');
+
+      if (segments.length === 1 && username) {
+        return {
+          url: 'https://behance.net/' + username,
+          username,
+        };
+      }
+
+      return null;
+    },
+    site: 'BEHANCE',
+    tests: {
+      'https://www.behance.net/': null,
+      'https://www.behance.net/gajus': {
+        url: 'https://behance.net/gajus',
+        username: 'gajus',
+      },
+    },
+    weight: 100,
+  },
   GOOGLE_DOCS_DOCUMENT: {
     contentType: 'DOCUMENT',
     domain: 'docs.google.com',
