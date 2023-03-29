@@ -1,6 +1,18 @@
 // cspell:disable
 
 export type SiteContentInfo = {
+  GOOGLE_DRIVE_FILE: {
+    contentType: 'FILE';
+    fileId: string;
+    site: 'GOOGLE_DRIVE';
+    url: string;
+  };
+  GOOGLE_DRIVE_FOLDER: {
+    contentType: 'FOLDER';
+    folderId: string;
+    site: 'GOOGLE_DRIVE';
+    url: string;
+  };
   SOUNDCLOUD_TRACK: {
     contentType: 'TRACK';
     site: 'SOUNDCLOUD';
@@ -153,6 +165,42 @@ const createIdFromFirstPathnameRegexMatchContentInfoExtractor = <
 export const siteContentRules: {
   [K in keyof SiteContentInfo]: SiteRule<SiteContentInfo[K]>;
 } = {
+  GOOGLE_DRIVE_FILE: {
+    contentType: 'FILE',
+    domain: 'drive.google.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'fileId',
+      /^\/file\/d\/([\w-]+)/u,
+      'https://drive.google.com/file/d/{{fileId}}/view',
+    ),
+    site: 'GOOGLE_DRIVE',
+    tests: {
+      'https://drive.google.com/file/d/1KBs8QdTjs-eJNEgZUxyvmkHkihg6mFnG/view?usp=share_link':
+        {
+          fileId: '1KBs8QdTjs-eJNEgZUxyvmkHkihg6mFnG',
+          url: 'https://drive.google.com/file/d/1KBs8QdTjs-eJNEgZUxyvmkHkihg6mFnG/view',
+        },
+    },
+    weight: 100,
+  },
+  GOOGLE_DRIVE_FOLDER: {
+    contentType: 'FOLDER',
+    domain: 'drive.google.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'folderId',
+      /^\/drive\/folders\/([\w-]+)/u,
+      'https://drive.google.com/drive/folders/{{folderId}}',
+    ),
+    site: 'GOOGLE_DRIVE',
+    tests: {
+      'https://drive.google.com/drive/folders/1JppVnu8-pIgr8IY0wuCo51JXP0H0YsDt?usp=share_link':
+        {
+          folderId: '1JppVnu8-pIgr8IY0wuCo51JXP0H0YsDt',
+          url: 'https://drive.google.com/drive/folders/1JppVnu8-pIgr8IY0wuCo51JXP0H0YsDt',
+        },
+    },
+    weight: 100,
+  },
   SOUNDCLOUD_TRACK: {
     contentType: 'TRACK',
     domain: 'soundcloud.com',
