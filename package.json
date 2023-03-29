@@ -5,6 +5,7 @@
     "url": "http://gajus.com"
   },
   "dependencies": {},
+  "description": "Extracts content information from known URL patterns.",
   "devDependencies": {
     "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/github": "^8.0.7",
@@ -29,7 +30,6 @@
     "link",
     "parser"
   ],
-  "description": "Extracts content information from known URL patterns.",
   "license": "BSD-3-Clause",
   "main": "./dist/index.js",
   "name": "semantic-link-parser",
