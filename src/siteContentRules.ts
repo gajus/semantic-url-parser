@@ -49,6 +49,12 @@ export type SiteContentInfo = {
     site: 'GOOGLE_DRIVE';
     url: string;
   };
+  INSTAGRAM_POST: {
+    contentType: 'POST';
+    postId: string;
+    site: 'INSTAGRAM';
+    url: string;
+  };
   SOUNDCLOUD_TRACK: {
     contentType: 'TRACK';
     site: 'SOUNDCLOUD';
@@ -364,6 +370,27 @@ export const siteContentRules: {
           folderId: '1JppVnu8-pIgr8IY0wuCo51JXP0H0YsDt',
           url: 'https://drive.google.com/drive/folders/1JppVnu8-pIgr8IY0wuCo51JXP0H0YsDt',
         },
+    },
+    weight: 100,
+  },
+  INSTAGRAM_POST: {
+    contentType: 'POST',
+    domain: 'instagram.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'postId',
+      /^\/p\/([a-zA-Z\d]+)/u,
+      'https://instagram.com/p/{{postId}}',
+    ),
+    site: 'INSTAGRAM',
+    tests: {
+      'https://www.instagram.com/p/CqX93czLUe2/': {
+        postId: 'CqX93czLUe2',
+        url: 'https://instagram.com/p/CqX93czLUe2',
+      },
+      'https://www.instagram.com/p/CqX93czLUe2/?utm_source=ig_web_copy_link': {
+        postId: 'CqX93czLUe2',
+        url: 'https://instagram.com/p/CqX93czLUe2',
+      },
     },
     weight: 100,
   },
