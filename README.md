@@ -29,6 +29,7 @@ extractContentInfoFromUrl('https://soundcloud.com/strangehumman/kyoto-2?utm_sour
 ## Supported Sites
 
 * https://behance.net/
+* https://canva.com/
 * https://docs.google.com/
 * https://drive.google.com/
 * https://soundcloud.com/

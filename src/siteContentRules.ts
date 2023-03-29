@@ -13,6 +13,12 @@ export type SiteContentInfo = {
     url: string;
     username: string;
   };
+  CANVA_DESIGN: {
+    contentType: 'DESIGN';
+    designId: string;
+    site: 'CANVA';
+    url: string;
+  };
   GOOGLE_DOCS_DOCUMENT: {
     contentType: 'DOCUMENT';
     documentId: string;
@@ -241,6 +247,27 @@ export const siteContentRules: {
         url: 'https://behance.net/gajus',
         username: 'gajus',
       },
+    },
+    weight: 100,
+  },
+  CANVA_DESIGN: {
+    contentType: 'DESIGN',
+    domain: 'canva.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'designId',
+      // TODO I am not clear what the two IDs map to.
+      // I have confirmed as much that the first one is not a user ID, i.e.
+      // If the same user created two designs, the first ID is not the same.
+      /^\/design\/([a-zA-Z\d]+\/[a-zA-Z\d]+)/u,
+      'https://canva.com/design/{{designId}}/view',
+    ),
+    site: 'CANVA',
+    tests: {
+      'https://www.canva.com/design/DAC1xq2GJMk/hIMpX3mPUmYkmNshGT0ZEw/view?utm_content=DAC1xq2GJMk&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink':
+        {
+          designId: 'DAC1xq2GJMk/hIMpX3mPUmYkmNshGT0ZEw',
+          url: 'https://canva.com/design/DAC1xq2GJMk/hIMpX3mPUmYkmNshGT0ZEw/view',
+        },
     },
     weight: 100,
   },
