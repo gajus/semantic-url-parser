@@ -1,6 +1,24 @@
 // cspell:disable
 
 export type SiteContentInfo = {
+  GOOGLE_DOCS_DOCUMENT: {
+    contentType: 'DOCUMENT';
+    documentId: string;
+    site: 'GOOGLE_DOCS';
+    url: string;
+  };
+  GOOGLE_DOCS_PRESENTATION: {
+    contentType: 'PRESENTATION';
+    presentationId: string;
+    site: 'GOOGLE_DOCS';
+    url: string;
+  };
+  GOOGLE_DOCS_SPREADSHEET: {
+    contentType: 'SPREADSHEET';
+    site: 'GOOGLE_DOCS';
+    spreadsheetId: string;
+    url: string;
+  };
   GOOGLE_DRIVE_FILE: {
     contentType: 'FILE';
     fileId: string;
@@ -165,6 +183,60 @@ const createIdFromFirstPathnameRegexMatchContentInfoExtractor = <
 export const siteContentRules: {
   [K in keyof SiteContentInfo]: SiteRule<SiteContentInfo[K]>;
 } = {
+  GOOGLE_DOCS_DOCUMENT: {
+    contentType: 'DOCUMENT',
+    domain: 'docs.google.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'documentId',
+      /^\/document\/d\/([\w-]+)/u,
+      'https://docs.google.com/document/d/{{documentId}}/edit',
+    ),
+    site: 'GOOGLE_DOCS',
+    tests: {
+      'https://docs.google.com/document/d/1_1aYiJqjLeHUuO8c3hqOcIjKc567LoWIkKyC82Mt7P0/edit?usp=sharing':
+        {
+          documentId: '1_1aYiJqjLeHUuO8c3hqOcIjKc567LoWIkKyC82Mt7P0',
+          url: 'https://docs.google.com/document/d/1_1aYiJqjLeHUuO8c3hqOcIjKc567LoWIkKyC82Mt7P0/edit',
+        },
+    },
+    weight: 100,
+  },
+  GOOGLE_DOCS_PRESENTATION: {
+    contentType: 'PRESENTATION',
+    domain: 'docs.google.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'presentationId',
+      /^\/presentation\/d\/([\w-]+)/u,
+      'https://docs.google.com/presentation/d/{{presentationId}}/edit',
+    ),
+    site: 'GOOGLE_DOCS',
+    tests: {
+      'https://docs.google.com/presentation/d/11V5We7oJGoVOZESmjBg9B6iMiQzEeL58N4ujUEwbrxI/edit?usp=sharing':
+        {
+          presentationId: '11V5We7oJGoVOZESmjBg9B6iMiQzEeL58N4ujUEwbrxI',
+          url: 'https://docs.google.com/presentation/d/11V5We7oJGoVOZESmjBg9B6iMiQzEeL58N4ujUEwbrxI/edit',
+        },
+    },
+    weight: 100,
+  },
+  GOOGLE_DOCS_SPREADSHEET: {
+    contentType: 'SPREADSHEET',
+    domain: 'docs.google.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'spreadsheetId',
+      /^\/spreadsheets\/d\/([\w-]+)/u,
+      'https://docs.google.com/spreadsheets/d/{{spreadsheetId}}/edit',
+    ),
+    site: 'GOOGLE_DOCS',
+    tests: {
+      'https://docs.google.com/spreadsheets/d/1spdflo8CdY98uxwFlGQssbU5Yz8oVjbZ5uM_0qASRCk/':
+        {
+          spreadsheetId: '1spdflo8CdY98uxwFlGQssbU5Yz8oVjbZ5uM_0qASRCk',
+          url: 'https://docs.google.com/spreadsheets/d/1spdflo8CdY98uxwFlGQssbU5Yz8oVjbZ5uM_0qASRCk/edit',
+        },
+    },
+    weight: 100,
+  },
   GOOGLE_DRIVE_FILE: {
     contentType: 'FILE',
     domain: 'drive.google.com',
