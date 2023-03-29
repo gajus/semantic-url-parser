@@ -15,6 +15,12 @@ for (const [siteContentId, { contentType, tests, site }] of Object.entries(
       () => {
         const contentInfo = extractContentInfoFromUrl(inputUrl);
 
+        if (attributes === null) {
+          expect(contentInfo).toBeNull();
+
+          return;
+        }
+
         if (!contentInfo) {
           throw new Error('No content info extracted');
         }

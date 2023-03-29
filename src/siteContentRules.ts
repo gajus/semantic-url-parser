@@ -78,7 +78,7 @@ type SiteRule<T extends SiteContentInfo[keyof SiteContentInfo]> = {
     Omit<Omit<T, 'contentType'>, 'site'>
   >;
   site: T['site'];
-  tests: Record<string, Omit<Omit<T, 'contentType'>, 'site'>>;
+  tests: Record<string, Omit<Omit<T, 'contentType'>, 'site'> | null>;
   weight: number;
 };
 
@@ -275,17 +275,26 @@ export const siteContentRules: {
   VIMEO_PROFILE: {
     contentType: 'PROFILE',
     domain: 'vimeo.com',
-    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
-      'username',
-      /^\/([a-z]\w+)/u,
-      'https://vimeo.com/{{username}}',
-    ),
+    extractContentInfo: (url) => {
+      const [, username] = /^\/([a-zA-Z]\w+)$/u.exec(url.pathname) ?? [];
+      const segments = url.pathname.replace(/^\//u, '').split('/');
+
+      if (segments.length === 1 && username) {
+        return {
+          url: 'https://vimeo.com/' + username,
+          username,
+        };
+      }
+
+      return null;
+    },
     site: 'VIMEO',
     tests: {
       'https://vimeo.com/gajus': {
         url: 'https://vimeo.com/gajus',
         username: 'gajus',
       },
+      'https://vimeo.com/vobow/chiaroscuro': null,
     },
     weight: 100,
   },
