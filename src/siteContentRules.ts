@@ -40,6 +40,12 @@ export type SiteContentInfo = {
     url: string;
     videoId: string;
   };
+  VIMEO_PROFILE: {
+    contentType: 'PROFILE';
+    site: 'VIMEO';
+    url: string;
+    username: string;
+  };
   VIMEO_VIDEO: {
     contentType: 'VIDEO';
     site: 'VIMEO';
@@ -262,6 +268,23 @@ export const siteContentRules: {
       'https://vimeo.com/manage/videos/374790314': {
         url: 'https://vimeo.com/374790314',
         videoId: '374790314',
+      },
+    },
+    weight: 100,
+  },
+  VIMEO_PROFILE: {
+    contentType: 'PROFILE',
+    domain: 'vimeo.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'username',
+      /^\/([a-z]\w+)/u,
+      'https://vimeo.com/{{username}}',
+    ),
+    site: 'VIMEO',
+    tests: {
+      'https://vimeo.com/gajus': {
+        url: 'https://vimeo.com/gajus',
+        username: 'gajus',
       },
     },
     weight: 100,
