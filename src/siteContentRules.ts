@@ -68,6 +68,12 @@ export type SiteContentInfo = {
     site: 'SPOTIFY';
     url: string;
   };
+  SPOTIFY_EPISODE: {
+    contentType: 'EPISODE';
+    episodeId: string;
+    site: 'SPOTIFY';
+    url: string;
+  };
   SPOTIFY_SHOW: {
     contentType: 'SHOW';
     showId: string;
@@ -419,6 +425,23 @@ export const siteContentRules: {
       'https://open.spotify.com/artist/0OdUWJ0sBjDrqHygGUXeCF?si=abC123dEeF': {
         artistId: '0OdUWJ0sBjDrqHygGUXeCF',
         url: 'https://open.spotify.com/artist/0OdUWJ0sBjDrqHygGUXeCF',
+      },
+    },
+    weight: 100,
+  },
+  SPOTIFY_EPISODE: {
+    contentType: 'EPISODE',
+    domain: 'open.spotify.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'episodeId',
+      /^\/episode\/([a-zA-Z\d]+)/u,
+      'https://open.spotify.com/episode/{{episodeId}}',
+    ),
+    site: 'SPOTIFY',
+    tests: {
+      'https://open.spotify.com/episode/6xg5QY1nZzYkqXrY8X7Y3w?si=abC123dEeF': {
+        episodeId: '6xg5QY1nZzYkqXrY8X7Y3w',
+        url: 'https://open.spotify.com/episode/6xg5QY1nZzYkqXrY8X7Y3w',
       },
     },
     weight: 100,
