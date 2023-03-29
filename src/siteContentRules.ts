@@ -8,6 +8,30 @@ export type SiteContentInfo = {
     url: string;
     username: string;
   };
+  SPOTIFY_ALBUM: {
+    albumId: string;
+    contentType: 'ALBUM';
+    site: 'SPOTIFY';
+    url: string;
+  };
+  SPOTIFY_ARTIST: {
+    artistId: string;
+    contentType: 'ARTIST';
+    site: 'SPOTIFY';
+    url: string;
+  };
+  SPOTIFY_SHOW: {
+    contentType: 'SHOW';
+    showId: string;
+    site: 'SPOTIFY';
+    url: string;
+  };
+  SPOTIFY_TRACK: {
+    contentType: 'TRACK';
+    site: 'SPOTIFY';
+    trackId: string;
+    url: string;
+  };
   TIKTOK_PROFILE: {
     contentType: 'PROFILE';
     site: 'TIKTOK';
@@ -154,6 +178,74 @@ export const siteContentRules: {
           url: 'https://soundcloud.com/strangehumman/kyoto-2',
           username: 'strangehumman',
         },
+    },
+    weight: 100,
+  },
+  SPOTIFY_ALBUM: {
+    contentType: 'ALBUM',
+    domain: 'open.spotify.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'albumId',
+      /^\/album\/([a-zA-Z\d]+)/u,
+      'https://open.spotify.com/album/{{albumId}}',
+    ),
+    site: 'SPOTIFY',
+    tests: {
+      'https://open.spotify.com/album/0sNOF9WDwhWunNAHPD3Baj?si=abC123dEeF': {
+        albumId: '0sNOF9WDwhWunNAHPD3Baj',
+        url: 'https://open.spotify.com/album/0sNOF9WDwhWunNAHPD3Baj',
+      },
+    },
+    weight: 100,
+  },
+  SPOTIFY_ARTIST: {
+    contentType: 'ARTIST',
+    domain: 'open.spotify.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'artistId',
+      /^\/artist\/([a-zA-Z\d]+)/u,
+      'https://open.spotify.com/artist/{{artistId}}',
+    ),
+    site: 'SPOTIFY',
+    tests: {
+      'https://open.spotify.com/artist/0OdUWJ0sBjDrqHygGUXeCF?si=abC123dEeF': {
+        artistId: '0OdUWJ0sBjDrqHygGUXeCF',
+        url: 'https://open.spotify.com/artist/0OdUWJ0sBjDrqHygGUXeCF',
+      },
+    },
+    weight: 100,
+  },
+  SPOTIFY_SHOW: {
+    contentType: 'SHOW',
+    domain: 'open.spotify.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'showId',
+      /^\/show\/([a-zA-Z\d]+)/u,
+      'https://open.spotify.com/show/{{showId}}',
+    ),
+    site: 'SPOTIFY',
+    tests: {
+      'https://open.spotify.com/show/6vWDO969PvNqNYHIOW5v0m?si=abC123dEeF': {
+        showId: '6vWDO969PvNqNYHIOW5v0m',
+        url: 'https://open.spotify.com/show/6vWDO969PvNqNYHIOW5v0m',
+      },
+    },
+    weight: 100,
+  },
+  SPOTIFY_TRACK: {
+    contentType: 'TRACK',
+    domain: 'open.spotify.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'trackId',
+      /^\/track\/([a-zA-Z\d]+)/u,
+      'https://open.spotify.com/track/{{trackId}}',
+    ),
+    site: 'SPOTIFY',
+    tests: {
+      'https://open.spotify.com/track/5uj0ZKm9chQRqB6mWKl4Uu': {
+        trackId: '5uj0ZKm9chQRqB6mWKl4Uu',
+        url: 'https://open.spotify.com/track/5uj0ZKm9chQRqB6mWKl4Uu',
+      },
     },
     weight: 100,
   },
