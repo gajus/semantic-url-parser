@@ -27,15 +27,15 @@
   ],
   "keywords": [
     "semantic",
-    "link",
+    "url",
     "parser"
   ],
   "license": "BSD-3-Clause",
   "main": "./dist/index.js",
-  "name": "semantic-link-parser",
+  "name": "semantic-url-parser",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gajus/semantic-link-parser"
+    "url": "https://github.com/gajus/semantic-url-parser"
   },
   "scripts": {
     "build": "rm -fr ./dist && tsc --project tsconfig.build.json",

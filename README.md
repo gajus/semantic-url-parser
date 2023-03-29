@@ -1,11 +1,11 @@
-# semantic-link-parser 🗂️
+# semantic-url-parser 🗂️
 
 Extracts content information from known URL patterns.
 
 ```ts
 import {
   extractContentInfoFromUrl,
-} from 'semantic-link-parser';
+} from 'semantic-url-parser';
 
 extractContentInfoFromUrl('https://youtu.be/8Qn_spdM5Zg?t=5');
 
