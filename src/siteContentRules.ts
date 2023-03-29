@@ -34,6 +34,18 @@ export type SiteContentInfo = {
     url: string;
     username: string;
   };
+  VIMEO_MANAGE_VIDEO: {
+    contentType: 'VIDEO';
+    site: 'VIMEO';
+    url: string;
+    videoId: string;
+  };
+  VIMEO_VIDEO: {
+    contentType: 'VIDEO';
+    site: 'VIMEO';
+    url: string;
+    videoId: string;
+  };
   YOUTUBE_SHORT_VIDEO: {
     contentType: 'SHORT_VIDEO';
     site: 'YOUTUBE';
@@ -236,6 +248,45 @@ export const siteContentRules: {
       },
     },
     weight: 90,
+  },
+  VIMEO_MANAGE_VIDEO: {
+    contentType: 'VIDEO',
+    domain: 'vimeo.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'videoId',
+      /^\/manage\/videos\/(\d+)/u,
+      'https://vimeo.com/{{videoId}}',
+    ),
+    site: 'VIMEO',
+    tests: {
+      'https://vimeo.com/manage/videos/374790314': {
+        url: 'https://vimeo.com/374790314',
+        videoId: '374790314',
+      },
+    },
+    weight: 100,
+  },
+  VIMEO_VIDEO: {
+    contentType: 'VIDEO',
+    domain: 'vimeo.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'videoId',
+      /^\/(\d+)/u,
+      'https://vimeo.com/{{videoId}}',
+    ),
+    site: 'VIMEO',
+    tests: {
+      'https://vimeo.com/123456789': {
+        url: 'https://vimeo.com/123456789',
+        videoId: '123456789',
+      },
+      'https://vimeo.com/403917615?embedded=true&source=video_title&owner=111305732':
+        {
+          url: 'https://vimeo.com/403917615',
+          videoId: '403917615',
+        },
+    },
+    weight: 100,
   },
   YOUTUBE_SHORT_VIDEO: {
     contentType: 'SHORT_VIDEO',

@@ -31,6 +31,7 @@ extractContentInfoFromUrl('https://soundcloud.com/strangehumman/kyoto-2?utm_sour
 * https://soundcloud.com/
 * https://tiktok.com/
 * https://twitter.com/
+* https://vimeo.com/
 * https://youtube.com/
 
 ## Adding New Sites
