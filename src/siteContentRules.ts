@@ -26,6 +26,12 @@ export type SiteContentInfo = {
     url: string;
     username: string;
   };
+  DROPBOX_FILE: {
+    contentType: 'FILE';
+    fileId: string;
+    site: 'DROPBOX';
+    url: string;
+  };
   FIGMA_FILE: {
     contentType: 'FILE';
     fileId: string;
@@ -340,6 +346,28 @@ export const siteContentRules: {
         url: 'https://codepen.io/Ashish-Nagvanshi/pen/RwBZJEx',
         username: 'Ashish-Nagvanshi',
       },
+    },
+    weight: 100,
+  },
+  DROPBOX_FILE: {
+    contentType: 'FILE',
+    domain: 'dropbox.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'fileId',
+      /^\/s\/([a-z\d]+)/u,
+      'https://dropbox.com/s/{{fileId}}',
+    ),
+    site: 'DROPBOX',
+    tests: {
+      'https://www.dropbox.com/s/0l5rt7y8rdfgy9l/': {
+        fileId: '0l5rt7y8rdfgy9l',
+        url: 'https://dropbox.com/s/0l5rt7y8rdfgy9l',
+      },
+      'https://www.dropbox.com/s/0l5rt7y8rdfgy9l/LL%20Envelope%20clutch%20REV.pdf':
+        {
+          fileId: '0l5rt7y8rdfgy9l',
+          url: 'https://dropbox.com/s/0l5rt7y8rdfgy9l',
+        },
     },
     weight: 100,
   },
