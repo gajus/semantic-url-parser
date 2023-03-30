@@ -68,6 +68,19 @@ export type SiteContentInfo = {
     site: 'FIGMA';
     url: string;
   };
+  FIVERR_GIG: {
+    contentType: 'GIG';
+    gigId: string;
+    site: 'FIVERR';
+    url: string;
+    username: string;
+  };
+  FIVERR_PROFILE: {
+    contentType: 'PROFILE';
+    site: 'FIVERR';
+    url: string;
+    username: string;
+  };
   GITHUB_PROFILE: {
     contentType: 'PROFILE';
     site: 'GITHUB';
@@ -621,6 +634,48 @@ export const siteContentRules: {
           prototypeId: 'JMT7Yw56eiphRJKp1S9EEe',
           url: 'https://figma.com/proto/JMT7Yw56eiphRJKp1S9EEe',
         },
+    },
+    weight: 100,
+  },
+  FIVERR_GIG: {
+    contentType: 'GIG',
+    domain: 'fiverr.com',
+    extractContentInfo: (url) => {
+      const [, username, gigId] =
+        /^\/([\w-]+)\/([\w-]+)/u.exec(url.pathname) ?? [];
+
+      if (username && gigId) {
+        return {
+          gigId,
+          url: 'https://fiverr.com/' + username + '/' + gigId,
+          username,
+        };
+      }
+
+      return null;
+    },
+    site: 'FIVERR',
+    tests: {
+      'https://www.fiverr.com/gajus/do-something-cool': {
+        gigId: 'do-something-cool',
+        url: 'https://fiverr.com/gajus/do-something-cool',
+        username: 'gajus',
+      },
+    },
+    weight: 100,
+  },
+  FIVERR_PROFILE: {
+    contentType: 'PROFILE',
+    domain: 'fiverr.com',
+    extractContentInfo: createUsernameContentInfoExtractor(
+      'https://fiverr.com/{{username}}',
+    ),
+    site: 'FIVERR',
+    tests: {
+      'https://www.fiverr.com/gajus': {
+        url: 'https://fiverr.com/gajus',
+        username: 'gajus',
+      },
     },
     weight: 100,
   },
