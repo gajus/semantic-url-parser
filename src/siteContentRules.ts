@@ -283,6 +283,12 @@ export type SiteContentInfo = {
     url: string;
     videoId: string;
   };
+  YOUTUBE_AT_CHANNEL: {
+    contentType: 'CHANNEL';
+    site: 'YOUTUBE';
+    url: string;
+    username: string;
+  };
   YOUTUBE_CHANNEL: {
     channelId: string;
     contentType: 'CHANNEL';
@@ -1301,6 +1307,23 @@ export const siteContentRules: {
         },
     },
     weight: 100,
+  },
+  YOUTUBE_AT_CHANNEL: {
+    contentType: 'CHANNEL',
+    domain: 'youtube.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'username',
+      /^\/@([\w-]+)/u,
+      'https://youtube.com/@{{username}}',
+    ),
+    site: 'YOUTUBE',
+    tests: {
+      'https://www.youtube.com/@aatishgnair': {
+        url: 'https://youtube.com/@aatishgnair',
+        username: 'aatishgnair',
+      },
+    },
+    weight: 90,
   },
   YOUTUBE_CHANNEL: {
     contentType: 'CHANNEL',
