@@ -197,6 +197,12 @@ export type SiteContentInfo = {
     url: string;
     username: string;
   };
+  UPWORK_PROFILE: {
+    contentType: 'PROFILE';
+    freelancerId: string;
+    site: 'UPWORK';
+    url: string;
+  };
   VIMEO_MANAGE_VIDEO: {
     contentType: 'VIDEO';
     site: 'VIMEO';
@@ -959,6 +965,23 @@ export const siteContentRules: {
       },
     },
     weight: 90,
+  },
+  UPWORK_PROFILE: {
+    contentType: 'PROFILE',
+    domain: 'upwork.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'freelancerId',
+      /^\/freelancers\/~([\w-]+)/u,
+      'https://www.upwork.com/freelancers/~{{freelancerId}}',
+    ),
+    site: 'UPWORK',
+    tests: {
+      'https://www.upwork.com/freelancers/~01eb5e04f87efe1f1d': {
+        freelancerId: '01eb5e04f87efe1f1d',
+        url: 'https://www.upwork.com/freelancers/~01eb5e04f87efe1f1d',
+      },
+    },
+    weight: 100,
   },
   VIMEO_MANAGE_VIDEO: {
     contentType: 'VIDEO',

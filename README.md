@@ -45,6 +45,7 @@ extractContentInfoFromUrl('https://soundcloud.com/strangehumman/kyoto-2?utm_sour
 * https://spotify.com/
 * https://tiktok.com/
 * https://twitter.com/
+* https://upwork.com/
 * https://vimeo.com/
 * https://youtube.com/
 
