@@ -135,6 +135,12 @@ export type SiteContentInfo = {
     site: 'INSTAGRAM';
     url: string;
   };
+  INSTAGRAM_PROFILE: {
+    contentType: 'PROFILE';
+    site: 'INSTAGRAM';
+    url: string;
+    username: string;
+  };
   INSTAGRAM_REEL: {
     contentType: 'REEL';
     reelId: string;
@@ -829,6 +835,32 @@ export const siteContentRules: {
       'https://www.instagram.com/p/CqX93czLUe2/?utm_source=ig_web_copy_link': {
         postId: 'CqX93czLUe2',
         url: 'https://instagram.com/p/CqX93czLUe2',
+      },
+    },
+    weight: 100,
+  },
+  INSTAGRAM_PROFILE: {
+    contentType: 'PROFILE',
+    domain: 'instagram.com',
+    extractContentInfo: (url) => {
+      const [, username] = /^\/([a-zA-Z]\w+)$/u.exec(url.pathname) ?? [];
+      const segments = url.pathname.replace(/^\//u, '').split('/');
+
+      if (segments.length === 1 && username) {
+        return {
+          url: 'https://instagram.com/' + username,
+          username,
+        };
+      }
+
+      return null;
+    },
+    site: 'INSTAGRAM',
+    tests: {
+      'https://www.instagram.com/': null,
+      'https://www.instagram.com/gajus': {
+        url: 'https://instagram.com/gajus',
+        username: 'gajus',
       },
     },
     weight: 100,
