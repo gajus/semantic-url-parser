@@ -62,6 +62,19 @@ export type SiteContentInfo = {
     site: 'FIGMA';
     url: string;
   };
+  GITHUB_PROFILE: {
+    contentType: 'PROFILE';
+    site: 'GITHUB';
+    url: string;
+    username: string;
+  };
+  GITHUB_REPOSITORY: {
+    contentType: 'REPOSITORY';
+    repositoryName: string;
+    site: 'GITHUB';
+    url: string;
+    username: string;
+  };
   GOOGLE_DOCS_DOCUMENT: {
     contentType: 'DOCUMENT';
     documentId: string;
@@ -565,6 +578,50 @@ export const siteContentRules: {
         },
     },
     weight: 100,
+  },
+  GITHUB_PROFILE: {
+    contentType: 'PROFILE',
+    domain: 'github.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'username',
+      /\/([\w-]+)\/?/u,
+      'https://github.com/{{username}}',
+    ),
+    site: 'GITHUB',
+    tests: {
+      'https://github.com/gajus': {
+        url: 'https://github.com/gajus',
+        username: 'gajus',
+      },
+    },
+    weight: 100,
+  },
+  GITHUB_REPOSITORY: {
+    contentType: 'REPOSITORY',
+    domain: 'github.com',
+    extractContentInfo: (url) => {
+      const [, username, repositoryName] =
+        /^\/([\w-]+)\/([\w-]+)/u.exec(url.pathname) ?? [];
+
+      if (username && repositoryName) {
+        return {
+          repositoryName,
+          url: `https://github.com/${username}/${repositoryName}`,
+          username,
+        };
+      }
+
+      return null;
+    },
+    site: 'GITHUB',
+    tests: {
+      'https://github.com/gajus/slonik': {
+        repositoryName: 'slonik',
+        url: 'https://github.com/gajus/slonik',
+        username: 'gajus',
+      },
+    },
+    weight: 90,
   },
   GOOGLE_DOCS_DOCUMENT: {
     contentType: 'DOCUMENT',
