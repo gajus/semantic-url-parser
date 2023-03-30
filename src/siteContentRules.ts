@@ -279,7 +279,7 @@ export const siteContentRules: {
       // TODO I am not clear what the two IDs map to.
       // I have confirmed as much that the first one is not a user ID, i.e.
       // If the same user created two designs, the first ID is not the same.
-      /^\/design\/([a-zA-Z\d]+\/[a-zA-Z\d]+)/u,
+      /^\/design\/([\w-]+\/[\w-]+)/u,
       'https://canva.com/design/{{designId}}/view',
     ),
     site: 'CANVA',
@@ -288,6 +288,11 @@ export const siteContentRules: {
         {
           designId: 'DAC1xq2GJMk/hIMpX3mPUmYkmNshGT0ZEw',
           url: 'https://canva.com/design/DAC1xq2GJMk/hIMpX3mPUmYkmNshGT0ZEw/view',
+        },
+      'https://www.canva.com/design/DAE_HVNSl10/nZqb-SL59cV6Unj5Xd3y_w/view?utm_content=DAE_HVNSl10&utm_campaign=designshare&utm_medium=link&utm_source=homepage_design_menu':
+        {
+          designId: 'DAE_HVNSl10/nZqb-SL59cV6Unj5Xd3y_w',
+          url: 'https://canva.com/design/DAE_HVNSl10/nZqb-SL59cV6Unj5Xd3y_w/view',
         },
     },
     weight: 100,
