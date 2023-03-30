@@ -209,6 +209,12 @@ export type SiteContentInfo = {
     site: 'PINTEREST';
     url: string;
   };
+  PINTEREST_PROFILE: {
+    contentType: 'PROFILE';
+    site: 'PINTEREST';
+    url: string;
+    username: string;
+  };
   SOUNDCLOUD_TRACK: {
     contentType: 'TRACK';
     site: 'SOUNDCLOUD';
@@ -1112,6 +1118,25 @@ export const siteContentRules: {
       'https://www.pinterest.com/pin/180003316664022943/': {
         pinId: '180003316664022943',
         url: 'https://pinterest.com/pin/180003316664022943',
+      },
+    },
+    weight: 100,
+  },
+  PINTEREST_PROFILE: {
+    contentType: 'PROFILE',
+    domain: /pinterest\.(ca|co\.uk|com|de|es|fr|ph)/u,
+    extractContentInfo: createUsernameContentInfoExtractor(
+      'https://pinterest.com/{{username}}',
+    ),
+    site: 'PINTEREST',
+    tests: {
+      'https://www.pinterest.com/gajus': {
+        url: 'https://pinterest.com/gajus',
+        username: 'gajus',
+      },
+      'https://www.pinterest.com/gajus/': {
+        url: 'https://pinterest.com/gajus',
+        username: 'gajus',
       },
     },
     weight: 100,
