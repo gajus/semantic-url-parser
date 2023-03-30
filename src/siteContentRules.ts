@@ -86,6 +86,12 @@ export type SiteContentInfo = {
     site: 'GOOGLE_DRIVE';
     url: string;
   };
+  GOOGLE_DRIVE_FOLDERVIEW: {
+    contentType: 'FOLDER';
+    folderId: string;
+    site: 'GOOGLE_DRIVE';
+    url: string;
+  };
   GOOGLE_PLAY_APP: {
     appId: string;
     contentType: 'APP';
@@ -556,6 +562,35 @@ export const siteContentRules: {
         {
           folderId: '1JppVnu8-pIgr8IY0wuCo51JXP0H0YsDt',
           url: 'https://drive.google.com/drive/folders/1JppVnu8-pIgr8IY0wuCo51JXP0H0YsDt',
+        },
+    },
+    weight: 100,
+  },
+  GOOGLE_DRIVE_FOLDERVIEW: {
+    contentType: 'FOLDER',
+    domain: 'drive.google.com',
+    extractContentInfo: (url, searchParameters) => {
+      if (!url.pathname.includes('folderview')) {
+        return null;
+      }
+
+      const id = searchParameters.get('id');
+
+      if (!id || typeof id !== 'string') {
+        return null;
+      }
+
+      return {
+        folderId: id,
+        url: `https://drive.google.com/drive/folders/${id}`,
+      };
+    },
+    site: 'GOOGLE_DRIVE',
+    tests: {
+      'https://drive.google.com/folderview?id=1Ho_pCqUGdwfAUKkan5CQOMg1Lgl0VoFI':
+        {
+          folderId: '1Ho_pCqUGdwfAUKkan5CQOMg1Lgl0VoFI',
+          url: 'https://drive.google.com/drive/folders/1Ho_pCqUGdwfAUKkan5CQOMg1Lgl0VoFI',
         },
     },
     weight: 100,
