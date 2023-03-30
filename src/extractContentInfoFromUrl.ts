@@ -6,7 +6,13 @@ export const extractContentInfoFromUrl = (inputUrl: string) => {
   for (const instructions of Object.values(siteContentRules).sort(
     (a, b) => a.weight - b.weight,
   )) {
-    if (url.hostname.replace('www.', '') !== instructions.domain) {
+    const subjectDomain = url.hostname.replace('www.', '');
+
+    if (typeof instructions.domain === 'string') {
+      if (subjectDomain !== instructions.domain) {
+        continue;
+      }
+    } else if (!instructions.domain.test(subjectDomain)) {
       continue;
     }
 

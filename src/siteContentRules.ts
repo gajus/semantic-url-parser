@@ -128,6 +128,12 @@ export type SiteContentInfo = {
     url: string;
     videoId: string;
   };
+  PINTEREST_PIN: {
+    contentType: 'PIN';
+    pinId: string;
+    site: 'PINTEREST';
+    url: string;
+  };
   SOUNDCLOUD_TRACK: {
     contentType: 'TRACK';
     site: 'SOUNDCLOUD';
@@ -269,7 +275,7 @@ type SiteContentInfoExtractor<T> = (
 
 type SiteRule<T extends SiteContentInfo[keyof SiteContentInfo]> = {
   contentType: T['contentType'];
-  domain: string;
+  domain: RegExp | string;
   extractContentInfo: SiteContentInfoExtractor<
     Omit<Omit<T, 'contentType'>, 'site'>
   >;
@@ -740,6 +746,23 @@ export const siteContentRules: {
       'https://www.loom.com/share/1db1e88a454043b9a885016c5bd6053d': {
         url: 'https://www.loom.com/share/1db1e88a454043b9a885016c5bd6053d',
         videoId: '1db1e88a454043b9a885016c5bd6053d',
+      },
+    },
+    weight: 100,
+  },
+  PINTEREST_PIN: {
+    contentType: 'PIN',
+    domain: /pinterest\.(ca|co\.uk|com|de|es|fr|ph)/u,
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'pinId',
+      /^\/pin\/(\d+)/u,
+      'https://pinterest.com/pin/{{pinId}}',
+    ),
+    site: 'PINTEREST',
+    tests: {
+      'https://www.pinterest.com/pin/180003316664022943/': {
+        pinId: '180003316664022943',
+        url: 'https://pinterest.com/pin/180003316664022943',
       },
     },
     weight: 100,
