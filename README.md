@@ -33,6 +33,7 @@ extractContentInfoFromUrl('https://soundcloud.com/strangehumman/kyoto-2?utm_sour
 * https://canva.com/
 * https://codepen.io/
 * https://docs.google.com/
+* https://dribbble.com/
 * https://drive.google.com/
 * https://dropbox.com/
 * https://figma.com/

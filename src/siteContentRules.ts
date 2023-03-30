@@ -44,6 +44,12 @@ export type SiteContentInfo = {
     url: string;
     username: string;
   };
+  DRIBBBLE_SHOT: {
+    contentType: 'SHOT';
+    shotId: string;
+    site: 'DRIBBBLE';
+    url: string;
+  };
   DROPBOX_FILE: {
     contentType: 'FILE';
     fileId: string;
@@ -518,6 +524,23 @@ export const siteContentRules: {
         penId: 'RwBZJEx',
         url: 'https://codepen.io/Ashish-Nagvanshi/pen/RwBZJEx',
         username: 'Ashish-Nagvanshi',
+      },
+    },
+    weight: 100,
+  },
+  DRIBBBLE_SHOT: {
+    contentType: 'SHOT',
+    domain: 'dribbble.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'shotId',
+      /\/shots\/(\d+)/u,
+      'https://dribbble.com/shots/{{shotId}}',
+    ),
+    site: 'DRIBBBLE',
+    tests: {
+      'https://dribbble.com/shots/1234567': {
+        shotId: '1234567',
+        url: 'https://dribbble.com/shots/1234567',
       },
     },
     weight: 100,
