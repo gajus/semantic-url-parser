@@ -19,6 +19,13 @@ export type SiteContentInfo = {
     site: 'CANVA';
     url: string;
   };
+  CODEPEN_PEN: {
+    contentType: 'PEN';
+    penId: string;
+    site: 'CODEPEN';
+    url: string;
+    username: string;
+  };
   FIGMA_FILE: {
     contentType: 'FILE';
     fileId: string;
@@ -294,6 +301,33 @@ export const siteContentRules: {
           designId: 'DAE_HVNSl10/nZqb-SL59cV6Unj5Xd3y_w',
           url: 'https://canva.com/design/DAE_HVNSl10/nZqb-SL59cV6Unj5Xd3y_w/view',
         },
+    },
+    weight: 100,
+  },
+  CODEPEN_PEN: {
+    contentType: 'PEN',
+    domain: 'codepen.io',
+    extractContentInfo: (url) => {
+      const [, username, penId] =
+        /^\/([\w-]+)\/pen\/(\w+)/u.exec(url.pathname) ?? [];
+
+      if (username && penId) {
+        return {
+          penId,
+          url: 'https://codepen.io/' + username + '/pen/' + penId,
+          username,
+        };
+      }
+
+      return null;
+    },
+    site: 'CODEPEN',
+    tests: {
+      'https://codepen.io/Ashish-Nagvanshi/pen/RwBZJEx': {
+        penId: 'RwBZJEx',
+        url: 'https://codepen.io/Ashish-Nagvanshi/pen/RwBZJEx',
+        username: 'Ashish-Nagvanshi',
+      },
     },
     weight: 100,
   },
