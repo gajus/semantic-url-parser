@@ -221,6 +221,12 @@ export type SiteContentInfo = {
     site: 'YOUTUBE';
     url: string;
   };
+  YOUTUBE_PLAYLIST: {
+    contentType: 'PLAYLIST';
+    playlistId: string;
+    site: 'YOUTUBE';
+    url: string;
+  };
   YOUTUBE_SHORT_VIDEO: {
     contentType: 'SHORT_VIDEO';
     site: 'YOUTUBE';
@@ -1032,6 +1038,34 @@ export const siteContentRules: {
       'https://youtube.com/channel/UC_8cM2OFz5rUTNskqehzLEg': {
         channelId: 'UC_8cM2OFz5rUTNskqehzLEg',
         url: 'https://youtube.com/channel/UC_8cM2OFz5rUTNskqehzLEg',
+      },
+    },
+    weight: 100,
+  },
+  YOUTUBE_PLAYLIST: {
+    contentType: 'PLAYLIST',
+    domain: 'youtube.com',
+    extractContentInfo: (url, searchParameters) => {
+      if (!url.pathname.includes('playlist')) {
+        return null;
+      }
+
+      const playlistId = searchParameters.get('list');
+
+      if (!playlistId) {
+        return null;
+      }
+
+      return {
+        playlistId,
+        url: 'https://youtube.com/playlist?list=' + playlistId,
+      };
+    },
+    site: 'YOUTUBE',
+    tests: {
+      'https://youtube.com/playlist?list=PLrOLhD2xpUxB_BO-W6iICLS7XLKaif-fR': {
+        playlistId: 'PLrOLhD2xpUxB_BO-W6iICLS7XLKaif-fR',
+        url: 'https://youtube.com/playlist?list=PLrOLhD2xpUxB_BO-W6iICLS7XLKaif-fR',
       },
     },
     weight: 100,
