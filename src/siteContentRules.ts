@@ -1,6 +1,18 @@
 // cspell:disable
 
 export type SiteContentInfo = {
+  APPLE_MUSIC_ALBUM: {
+    albumId: string;
+    contentType: 'ALBUM';
+    site: 'APPLE_MUSIC';
+    url: string;
+  };
+  APPLE_MUSIC_ARTIST: {
+    artistId: string;
+    contentType: 'ARTIST';
+    site: 'APPLE_MUSIC';
+    url: string;
+  };
   BEHANCE_GALLERY: {
     contentType: 'GALLERY';
     galleryId: string;
@@ -259,6 +271,40 @@ const createIdFromFirstPathnameRegexMatchContentInfoExtractor = <
 export const siteContentRules: {
   [K in keyof SiteContentInfo]: SiteRule<SiteContentInfo[K]>;
 } = {
+  APPLE_MUSIC_ALBUM: {
+    contentType: 'ALBUM',
+    domain: 'music.apple.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'albumId',
+      /\/album\/[\w-]+\/(\d+)/u,
+      'https://music.apple.com/album/{{albumId}}',
+    ),
+    site: 'APPLE_MUSIC',
+    tests: {
+      'https://music.apple.com/us/album/diamonds/1632654221?i=1632654222': {
+        albumId: '1632654221',
+        url: 'https://music.apple.com/album/1632654221',
+      },
+    },
+    weight: 100,
+  },
+  APPLE_MUSIC_ARTIST: {
+    contentType: 'ARTIST',
+    domain: 'music.apple.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'artistId',
+      /\/artist\/[\w-]+\/(\d+)/u,
+      'https://music.apple.com/artist/{{artistId}}',
+    ),
+    site: 'APPLE_MUSIC',
+    tests: {
+      'https://music.apple.com/us/artist/8karri/1465797897': {
+        artistId: '1465797897',
+        url: 'https://music.apple.com/artist/1465797897',
+      },
+    },
+    weight: 100,
+  },
   BEHANCE_GALLERY: {
     contentType: 'GALLERY',
     domain: 'behance.net',
