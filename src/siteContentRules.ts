@@ -216,9 +216,9 @@ export type SiteContentInfo = {
     username: string;
   };
   SOUNDCLOUD_TRACK: {
-    contentType: 'TRACK';
+    audioTrackId: string;
+    contentType: 'AUDIO_TRACK';
     site: 'SOUNDCLOUD';
-    trackId: string;
     url: string;
     username: string;
   };
@@ -253,9 +253,9 @@ export type SiteContentInfo = {
     url: string;
   };
   SPOTIFY_TRACK: {
-    contentType: 'TRACK';
+    audioTrackId: string;
+    contentType: 'AUDIO_TRACK';
     site: 'SPOTIFY';
-    trackId: string;
     url: string;
   };
   TIKTOK_PROFILE: {
@@ -1142,16 +1142,16 @@ export const siteContentRules: {
     weight: 100,
   },
   SOUNDCLOUD_TRACK: {
-    contentType: 'TRACK',
+    contentType: 'AUDIO_TRACK',
     domain: 'soundcloud.com',
     extractContentInfo: (url) => {
-      const [, username, trackId] =
+      const [, username, audioTrackId] =
         /([\w-]+)\/([\w-]+)/u.exec(url.pathname) ?? [];
 
-      if (username && trackId) {
+      if (username && audioTrackId) {
         return {
-          trackId,
-          url: 'https://soundcloud.com/' + username + '/' + trackId,
+          audioTrackId,
+          url: 'https://soundcloud.com/' + username + '/' + audioTrackId,
           username,
         };
       }
@@ -1162,7 +1162,7 @@ export const siteContentRules: {
     tests: {
       'https://soundcloud.com/strangehumman/kyoto-2?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing':
         {
-          trackId: 'kyoto-2',
+          audioTrackId: 'kyoto-2',
           url: 'https://soundcloud.com/strangehumman/kyoto-2',
           username: 'strangehumman',
         },
@@ -1255,17 +1255,17 @@ export const siteContentRules: {
     weight: 100,
   },
   SPOTIFY_TRACK: {
-    contentType: 'TRACK',
+    contentType: 'AUDIO_TRACK',
     domain: 'open.spotify.com',
     extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
-      'trackId',
+      'audioTrackId',
       /^\/track\/([a-zA-Z\d]+)/u,
-      'https://open.spotify.com/track/{{trackId}}',
+      'https://open.spotify.com/track/{{audioTrackId}}',
     ),
     site: 'SPOTIFY',
     tests: {
       'https://open.spotify.com/track/5uj0ZKm9chQRqB6mWKl4Uu': {
-        trackId: '5uj0ZKm9chQRqB6mWKl4Uu',
+        audioTrackId: '5uj0ZKm9chQRqB6mWKl4Uu',
         url: 'https://open.spotify.com/track/5uj0ZKm9chQRqB6mWKl4Uu',
       },
     },

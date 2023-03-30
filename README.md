@@ -10,8 +10,8 @@ import {
 extractContentInfoFromUrl('https://youtu.be/8Qn_spdM5Zg?t=5');
 
 // {
-//   content: 'VIDEO',
-//   id: '8Qn_spdM5Zg',
+//   contentType: 'VIDEO',
+//   videoId: '8Qn_spdM5Zg',
 //   site: 'YOUTUBE',
 //   url: 'https://www.youtube.com/watch?v=8Qn_spdM5Zg'
 // }
@@ -19,8 +19,8 @@ extractContentInfoFromUrl('https://youtu.be/8Qn_spdM5Zg?t=5');
 extractContentInfoFromUrl('https://soundcloud.com/strangehumman/kyoto-2?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing');
 
 // {
-//   content: 'TRACK',
-//   id: 'kyoto-2',
+//   contentType: 'AUDIO_TRACK',
+//   audioTrackId: 'kyoto-2',
 //   username: 'strangehumman',
 //   url: 'https://soundcloud.com/strangehumman/kyoto-2',
 // }
