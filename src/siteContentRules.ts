@@ -843,8 +843,12 @@ export const siteContentRules: {
     contentType: 'PROFILE',
     domain: 'instagram.com',
     extractContentInfo: (url) => {
-      const [, username] = /^\/([a-zA-Z]\w+)$/u.exec(url.pathname) ?? [];
-      const segments = url.pathname.replace(/^\//u, '').split('/');
+      const segments = url.pathname
+        .replace(/^\//u, '')
+        .replace(/\/$/u, '')
+        .split('/');
+
+      const username = segments[0];
 
       if (segments.length === 1 && username) {
         return {
@@ -859,6 +863,10 @@ export const siteContentRules: {
     tests: {
       'https://www.instagram.com/': null,
       'https://www.instagram.com/gajus': {
+        url: 'https://instagram.com/gajus',
+        username: 'gajus',
+      },
+      'https://www.instagram.com/gajus/': {
         url: 'https://instagram.com/gajus',
         username: 'gajus',
       },
