@@ -390,6 +390,26 @@ const createIdFromFirstPathnameRegexMatchContentInfoExtractor = <
   };
 };
 
+const createUsernameContentInfoExtractor = (urlTemplate: string) => {
+  return (url) => {
+    const segments = url.pathname
+      .replace(/^\//u, '')
+      .replace(/\/$/u, '')
+      .split('/');
+
+    const username = segments[0];
+
+    if (segments.length === 1 && username) {
+      return {
+        url: urlTemplate.replace('{{username}}', username),
+        username,
+      };
+    }
+
+    return null;
+  };
+};
+
 export const siteContentRules: {
   [K in keyof SiteContentInfo]: SiteRule<SiteContentInfo[K]>;
 } = {
@@ -464,19 +484,9 @@ export const siteContentRules: {
   BEHANCE_PROFILE: {
     contentType: 'PROFILE',
     domain: 'behance.net',
-    extractContentInfo: (url) => {
-      const [, username] = /^\/([a-zA-Z]\w+)$/u.exec(url.pathname) ?? [];
-      const segments = url.pathname.replace(/^\//u, '').split('/');
-
-      if (segments.length === 1 && username) {
-        return {
-          url: 'https://behance.net/' + username,
-          username,
-        };
-      }
-
-      return null;
-    },
+    extractContentInfo: createUsernameContentInfoExtractor(
+      'https://behance.net/{{username}}',
+    ),
     site: 'BEHANCE',
     tests: {
       'https://www.behance.net/': null,
@@ -842,23 +852,9 @@ export const siteContentRules: {
   INSTAGRAM_PROFILE: {
     contentType: 'PROFILE',
     domain: 'instagram.com',
-    extractContentInfo: (url) => {
-      const segments = url.pathname
-        .replace(/^\//u, '')
-        .replace(/\/$/u, '')
-        .split('/');
-
-      const username = segments[0];
-
-      if (segments.length === 1 && username) {
-        return {
-          url: 'https://instagram.com/' + username,
-          username,
-        };
-      }
-
-      return null;
-    },
+    extractContentInfo: createUsernameContentInfoExtractor(
+      'https://instagram.com/{{username}}',
+    ),
     site: 'INSTAGRAM',
     tests: {
       'https://www.instagram.com/': null,
@@ -1307,19 +1303,9 @@ export const siteContentRules: {
   VIMEO_PROFILE: {
     contentType: 'PROFILE',
     domain: 'vimeo.com',
-    extractContentInfo: (url) => {
-      const [, username] = /^\/([a-zA-Z]\w+)$/u.exec(url.pathname) ?? [];
-      const segments = url.pathname.replace(/^\//u, '').split('/');
-
-      if (segments.length === 1 && username) {
-        return {
-          url: 'https://vimeo.com/' + username,
-          username,
-        };
-      }
-
-      return null;
-    },
+    extractContentInfo: createUsernameContentInfoExtractor(
+      'https://vimeo.com/{{username}}',
+    ),
     site: 'VIMEO',
     tests: {
       'https://vimeo.com/gajus': {
@@ -1328,7 +1314,7 @@ export const siteContentRules: {
       },
       'https://vimeo.com/vobow/chiaroscuro': null,
     },
-    weight: 100,
+    weight: 110,
   },
   VIMEO_VIDEO: {
     contentType: 'VIDEO',
