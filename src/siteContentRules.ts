@@ -116,6 +116,12 @@ export type SiteContentInfo = {
     site: 'INSTAGRAM';
     url: string;
   };
+  LINKEDIN_PROFILE: {
+    contentType: 'PROFILE';
+    profileId: string;
+    site: 'LINKEDIN';
+    url: string;
+  };
   LINKTREE_PROFILE: {
     contentType: 'PROFILE';
     site: 'LINKTREE';
@@ -712,6 +718,23 @@ export const siteContentRules: {
       'https://www.instagram.com/p/CqX93czLUe2/?utm_source=ig_web_copy_link': {
         postId: 'CqX93czLUe2',
         url: 'https://instagram.com/p/CqX93czLUe2',
+      },
+    },
+    weight: 100,
+  },
+  LINKEDIN_PROFILE: {
+    contentType: 'PROFILE',
+    domain: 'linkedin.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'profileId',
+      /^\/in\/([\w-]+)/u,
+      'https://www.linkedin.com/in/{{profileId}}/',
+    ),
+    site: 'LINKEDIN',
+    tests: {
+      'https://www.linkedin.com/in/vimal-mamidala-a862301b4/': {
+        profileId: 'vimal-mamidala-a862301b4',
+        url: 'https://www.linkedin.com/in/vimal-mamidala-a862301b4/',
       },
     },
     weight: 100,
