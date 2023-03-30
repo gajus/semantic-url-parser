@@ -116,6 +116,12 @@ export type SiteContentInfo = {
     site: 'INSTAGRAM';
     url: string;
   };
+  INSTAGRAM_REEL: {
+    contentType: 'REEL';
+    reelId: string;
+    site: 'INSTAGRAM';
+    url: string;
+  };
   LINKEDIN_FEED_POST: {
     contentType: 'POST';
     postId: string;
@@ -724,6 +730,23 @@ export const siteContentRules: {
       'https://www.instagram.com/p/CqX93czLUe2/?utm_source=ig_web_copy_link': {
         postId: 'CqX93czLUe2',
         url: 'https://instagram.com/p/CqX93czLUe2',
+      },
+    },
+    weight: 100,
+  },
+  INSTAGRAM_REEL: {
+    contentType: 'REEL',
+    domain: 'instagram.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'reelId',
+      /^\/reel\/(\w+)/u,
+      'https://instagram.com/reel/{{reelId}}',
+    ),
+    site: 'INSTAGRAM',
+    tests: {
+      'https://www.instagram.com/reel/Cbz20_0j2m4/': {
+        reelId: 'Cbz20_0j2m4',
+        url: 'https://instagram.com/reel/Cbz20_0j2m4',
       },
     },
     weight: 100,
