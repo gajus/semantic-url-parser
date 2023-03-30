@@ -19,6 +19,12 @@ export type SiteContentInfo = {
     site: 'CANVA';
     url: string;
   };
+  FIGMA_FILE: {
+    contentType: 'FILE';
+    fileId: string;
+    site: 'FIGMA';
+    url: string;
+  };
   GOOGLE_DOCS_DOCUMENT: {
     contentType: 'DOCUMENT';
     documentId: string;
@@ -283,6 +289,23 @@ export const siteContentRules: {
           designId: 'DAC1xq2GJMk/hIMpX3mPUmYkmNshGT0ZEw',
           url: 'https://canva.com/design/DAC1xq2GJMk/hIMpX3mPUmYkmNshGT0ZEw/view',
         },
+    },
+    weight: 100,
+  },
+  FIGMA_FILE: {
+    contentType: 'FILE',
+    domain: 'figma.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'fileId',
+      /^\/file\/([a-zA-Z\d]+)/u,
+      'https://figma.com/file/{{fileId}}',
+    ),
+    site: 'FIGMA',
+    tests: {
+      'https://www.figma.com/file/49P8UWLOadWskPwPvSz4bD': {
+        fileId: '49P8UWLOadWskPwPvSz4bD',
+        url: 'https://figma.com/file/49P8UWLOadWskPwPvSz4bD',
+      },
     },
     weight: 100,
   },
