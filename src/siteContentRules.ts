@@ -197,11 +197,17 @@ export type SiteContentInfo = {
     url: string;
     username: string;
   };
-  UPWORK_PROFILE: {
+  UPWORK_PROFILE_ID: {
     contentType: 'PROFILE';
     freelancerId: string;
     site: 'UPWORK';
     url: string;
+  };
+  UPWORK_PROFILE_USERNAME: {
+    contentType: 'PROFILE';
+    site: 'UPWORK';
+    url: string;
+    username: string;
   };
   VIMEO_MANAGE_VIDEO: {
     contentType: 'VIDEO';
@@ -966,7 +972,7 @@ export const siteContentRules: {
     },
     weight: 90,
   },
-  UPWORK_PROFILE: {
+  UPWORK_PROFILE_ID: {
     contentType: 'PROFILE',
     domain: 'upwork.com',
     extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
@@ -979,6 +985,23 @@ export const siteContentRules: {
       'https://www.upwork.com/freelancers/~01eb5e04f87efe1f1d': {
         freelancerId: '01eb5e04f87efe1f1d',
         url: 'https://www.upwork.com/freelancers/~01eb5e04f87efe1f1d',
+      },
+    },
+    weight: 90,
+  },
+  UPWORK_PROFILE_USERNAME: {
+    contentType: 'PROFILE',
+    domain: 'upwork.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'username',
+      /^\/freelancers\/([\w-]+)/u,
+      'https://upwork.com/freelancers/{{username}}',
+    ),
+    site: 'UPWORK',
+    tests: {
+      'https://www.upwork.com/freelancers/miroslavt': {
+        url: 'https://upwork.com/freelancers/miroslavt',
+        username: 'miroslavt',
       },
     },
     weight: 100,
