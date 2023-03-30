@@ -92,6 +92,12 @@ export type SiteContentInfo = {
     site: 'INSTAGRAM';
     url: string;
   };
+  LINKTREE_PROFILE: {
+    contentType: 'PROFILE';
+    site: 'LINKTREE';
+    url: string;
+    username: string;
+  };
   LOOM_VIDEO: {
     contentType: 'VIDEO';
     site: 'LOOM';
@@ -565,6 +571,23 @@ export const siteContentRules: {
       'https://www.instagram.com/p/CqX93czLUe2/?utm_source=ig_web_copy_link': {
         postId: 'CqX93czLUe2',
         url: 'https://instagram.com/p/CqX93czLUe2',
+      },
+    },
+    weight: 100,
+  },
+  LINKTREE_PROFILE: {
+    contentType: 'PROFILE',
+    domain: 'linktr.ee',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'username',
+      /^\/(\w+)$/u,
+      'https://linktr.ee/{{username}}',
+    ),
+    site: 'LINKTREE',
+    tests: {
+      'https://linktr.ee/gajus': {
+        url: 'https://linktr.ee/gajus',
+        username: 'gajus',
       },
     },
     weight: 100,
