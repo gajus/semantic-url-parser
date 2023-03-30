@@ -32,6 +32,12 @@ export type SiteContentInfo = {
     site: 'FIGMA';
     url: string;
   };
+  FIGMA_PROTOTYPE: {
+    contentType: 'PROTOTYPE';
+    prototypeId: string;
+    site: 'FIGMA';
+    url: string;
+  };
   GOOGLE_DOCS_DOCUMENT: {
     contentType: 'DOCUMENT';
     documentId: string;
@@ -351,6 +357,24 @@ export const siteContentRules: {
         fileId: '49P8UWLOadWskPwPvSz4bD',
         url: 'https://figma.com/file/49P8UWLOadWskPwPvSz4bD',
       },
+    },
+    weight: 100,
+  },
+  FIGMA_PROTOTYPE: {
+    contentType: 'PROTOTYPE',
+    domain: 'figma.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'prototypeId',
+      /^\/proto\/([a-zA-Z\d]+)/u,
+      'https://figma.com/proto/{{prototypeId}}',
+    ),
+    site: 'FIGMA',
+    tests: {
+      'https://www.figma.com/proto/JMT7Yw56eiphRJKp1S9EEe/Rabbit-UI?node-id=1-257&starting-point-node-id=1%3A257':
+        {
+          prototypeId: 'JMT7Yw56eiphRJKp1S9EEe',
+          url: 'https://figma.com/proto/JMT7Yw56eiphRJKp1S9EEe',
+        },
     },
     weight: 100,
   },
