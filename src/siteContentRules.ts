@@ -1586,21 +1586,26 @@ export const siteContentRules: {
   },
   YOUTUBE_VIDEO: {
     contentType: 'VIDEO',
-    domain: 'youtube.com',
+    domain: /(^|\.)youtube\.com/u,
     extractContentInfo: createIdFromSearchParameterContentExtractor(
       'videoId',
       'v',
-      'https://www.youtube.com/watch?v={{videoId}}',
+      'https://youtube.com/watch?v={{videoId}}',
     ),
     site: 'YOUTUBE',
     tests: {
+      'https://m.youtube.com/watch?v=5yrlJbeUgCc&ab_channel=EasyPeasyForTutorials':
+        {
+          url: 'https://youtube.com/watch?v=5yrlJbeUgCc',
+          videoId: '5yrlJbeUgCc',
+        },
       'https://www.youtube.com/watch?v=5yrlJbeUgCc&ab_channel=EasyPeasyForTutorials':
         {
-          url: 'https://www.youtube.com/watch?v=5yrlJbeUgCc',
+          url: 'https://youtube.com/watch?v=5yrlJbeUgCc',
           videoId: '5yrlJbeUgCc',
         },
       'https://www.youtube.com/watch?v=wE9vSGvzSHg': {
-        url: 'https://www.youtube.com/watch?v=wE9vSGvzSHg',
+        url: 'https://youtube.com/watch?v=wE9vSGvzSHg',
         videoId: 'wE9vSGvzSHg',
       },
     },
