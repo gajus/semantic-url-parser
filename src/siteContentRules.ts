@@ -910,17 +910,21 @@ export const siteContentRules: {
   },
   LINKEDIN_PROFILE: {
     contentType: 'PROFILE',
-    domain: 'linkedin.com',
+    domain: /(^|\.)linkedin.com$/u,
     extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
       'profileId',
       /^\/in\/([\w-]+)/u,
-      'https://www.linkedin.com/in/{{profileId}}/',
+      'https://linkedin.com/in/{{profileId}}/',
     ),
     site: 'LINKEDIN',
     tests: {
+      'https://in.linkedin.com/in/amol-tiwari-1a1956104': {
+        profileId: 'amol-tiwari-1a1956104',
+        url: 'https://linkedin.com/in/amol-tiwari-1a1956104/',
+      },
       'https://www.linkedin.com/in/vimal-mamidala-a862301b4/': {
         profileId: 'vimal-mamidala-a862301b4',
-        url: 'https://www.linkedin.com/in/vimal-mamidala-a862301b4/',
+        url: 'https://linkedin.com/in/vimal-mamidala-a862301b4/',
       },
     },
     weight: 100,
