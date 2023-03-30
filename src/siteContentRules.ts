@@ -1,6 +1,12 @@
 // cspell:disable
 
 export type SiteContentInfo = {
+  APPLE_APPS_APP: {
+    appId: string;
+    contentType: 'APP';
+    site: 'APPLE_APPS';
+    url: string;
+  };
   APPLE_MUSIC_ALBUM: {
     albumId: string;
     contentType: 'ALBUM';
@@ -295,6 +301,23 @@ const createIdFromFirstPathnameRegexMatchContentInfoExtractor = <
 export const siteContentRules: {
   [K in keyof SiteContentInfo]: SiteRule<SiteContentInfo[K]>;
 } = {
+  APPLE_APPS_APP: {
+    contentType: 'APP',
+    domain: 'apps.apple.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'appId',
+      /\/app\/[\w-]+\/id(\d+)/u,
+      'https://apps.apple.com/app/{{appId}}',
+    ),
+    site: 'APPLE_APPS',
+    tests: {
+      'https://apps.apple.com/us/app/yupik/id1264786636': {
+        appId: '1264786636',
+        url: 'https://apps.apple.com/app/1264786636',
+      },
+    },
+    weight: 100,
+  },
   APPLE_MUSIC_ALBUM: {
     contentType: 'ALBUM',
     domain: 'music.apple.com',
