@@ -215,6 +215,12 @@ export type SiteContentInfo = {
     url: string;
     videoId: string;
   };
+  YOUTUBE_CHANNEL: {
+    channelId: string;
+    contentType: 'CHANNEL';
+    site: 'YOUTUBE';
+    url: string;
+  };
   YOUTUBE_SHORT_VIDEO: {
     contentType: 'SHORT_VIDEO';
     site: 'YOUTUBE';
@@ -1010,6 +1016,23 @@ export const siteContentRules: {
           url: 'https://vimeo.com/403917615',
           videoId: '403917615',
         },
+    },
+    weight: 100,
+  },
+  YOUTUBE_CHANNEL: {
+    contentType: 'CHANNEL',
+    domain: 'youtube.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'channelId',
+      /^\/channel\/([\w-]+)/u,
+      'https://youtube.com/channel/{{channelId}}',
+    ),
+    site: 'YOUTUBE',
+    tests: {
+      'https://youtube.com/channel/UC_8cM2OFz5rUTNskqehzLEg': {
+        channelId: 'UC_8cM2OFz5rUTNskqehzLEg',
+        url: 'https://youtube.com/channel/UC_8cM2OFz5rUTNskqehzLEg',
+      },
     },
     weight: 100,
   },
