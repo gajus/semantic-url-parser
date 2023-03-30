@@ -116,6 +116,12 @@ export type SiteContentInfo = {
     site: 'INSTAGRAM';
     url: string;
   };
+  LINKEDIN_FEED_POST: {
+    contentType: 'POST';
+    postId: string;
+    site: 'LINKEDIN';
+    url: string;
+  };
   LINKEDIN_PROFILE: {
     contentType: 'PROFILE';
     profileId: string;
@@ -719,6 +725,24 @@ export const siteContentRules: {
         postId: 'CqX93czLUe2',
         url: 'https://instagram.com/p/CqX93czLUe2',
       },
+    },
+    weight: 100,
+  },
+  LINKEDIN_FEED_POST: {
+    contentType: 'POST',
+    domain: 'linkedin.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'postId',
+      /^\/feed\/update\/urn:li:activity:([\w-]+)/u,
+      'https://www.linkedin.com/feed/update/urn:li:activity:{{postId}}/',
+    ),
+    site: 'LINKEDIN',
+    tests: {
+      'https://www.linkedin.com/feed/update/urn:li:activity:6927611303767212032/':
+        {
+          postId: '6927611303767212032',
+          url: 'https://www.linkedin.com/feed/update/urn:li:activity:6927611303767212032/',
+        },
     },
     weight: 100,
   },
