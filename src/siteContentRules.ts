@@ -44,6 +44,12 @@ export type SiteContentInfo = {
     url: string;
     username: string;
   };
+  DRIBBBLE_PROFILE: {
+    contentType: 'PROFILE';
+    site: 'DRIBBBLE';
+    url: string;
+    username: string;
+  };
   DRIBBBLE_SHOT: {
     contentType: 'SHOT';
     shotId: string;
@@ -559,6 +565,22 @@ export const siteContentRules: {
         penId: 'RwBZJEx',
         url: 'https://codepen.io/Ashish-Nagvanshi/pen/RwBZJEx',
         username: 'Ashish-Nagvanshi',
+      },
+    },
+    weight: 100,
+  },
+  DRIBBBLE_PROFILE: {
+    contentType: 'PROFILE',
+    domain: 'dribbble.com',
+    extractContentInfo: createUsernameContentInfoExtractor(
+      'https://dribbble.com/{{username}}',
+    ),
+    site: 'DRIBBBLE',
+    tests: {
+      'https://dribbble.com/': null,
+      'https://dribbble.com/gajus': {
+        url: 'https://dribbble.com/gajus',
+        username: 'gajus',
       },
     },
     weight: 100,
