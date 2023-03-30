@@ -86,6 +86,12 @@ export type SiteContentInfo = {
     site: 'GOOGLE_DRIVE';
     url: string;
   };
+  GOOGLE_PLAY_APP: {
+    appId: string;
+    contentType: 'APP';
+    site: 'GOOGLE_PLAY';
+    url: string;
+  };
   INSTAGRAM_POST: {
     contentType: 'POST';
     postId: string;
@@ -550,6 +556,24 @@ export const siteContentRules: {
         {
           folderId: '1JppVnu8-pIgr8IY0wuCo51JXP0H0YsDt',
           url: 'https://drive.google.com/drive/folders/1JppVnu8-pIgr8IY0wuCo51JXP0H0YsDt',
+        },
+    },
+    weight: 100,
+  },
+  GOOGLE_PLAY_APP: {
+    contentType: 'APP',
+    domain: 'play.google.com',
+    extractContentInfo: createIdFromSearchParameterContentExtractor(
+      'appId',
+      'id',
+      'https://play.google.com/store/apps/details?id={{appId}}',
+    ),
+    site: 'GOOGLE_PLAY',
+    tests: {
+      'https://play.google.com/store/apps/details?id=com.AdrLVD.BBallShootout':
+        {
+          appId: 'com.AdrLVD.BBallShootout',
+          url: 'https://play.google.com/store/apps/details?id=com.AdrLVD.BBallShootout',
         },
     },
     weight: 100,
