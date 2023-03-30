@@ -265,6 +265,12 @@ export type SiteContentInfo = {
     username: string;
     videoId: string;
   };
+  TWITCH_PROFILE: {
+    contentType: 'PROFILE';
+    site: 'TWITCH';
+    url: string;
+    username: string;
+  };
   TWITTER_PROFILE: {
     contentType: 'PROFILE';
     site: 'TWITTER';
@@ -1293,6 +1299,21 @@ export const siteContentRules: {
       },
     },
     weight: 90,
+  },
+  TWITCH_PROFILE: {
+    contentType: 'PROFILE',
+    domain: 'twitch.tv',
+    extractContentInfo: createUsernameContentInfoExtractor(
+      'https://twitch.tv/{{username}}',
+    ),
+    site: 'TWITCH',
+    tests: {
+      'https://www.twitch.tv/gajus': {
+        url: 'https://twitch.tv/gajus',
+        username: 'gajus',
+      },
+    },
+    weight: 100,
   },
   TWITTER_PROFILE: {
     contentType: 'PROFILE',
