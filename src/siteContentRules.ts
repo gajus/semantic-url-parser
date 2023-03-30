@@ -68,6 +68,12 @@ export type SiteContentInfo = {
     site: 'INSTAGRAM';
     url: string;
   };
+  LOOM_VIDEO: {
+    contentType: 'VIDEO';
+    site: 'LOOM';
+    url: string;
+    videoId: string;
+  };
   SOUNDCLOUD_TRACK: {
     contentType: 'TRACK';
     site: 'SOUNDCLOUD';
@@ -455,6 +461,23 @@ export const siteContentRules: {
       'https://www.instagram.com/p/CqX93czLUe2/?utm_source=ig_web_copy_link': {
         postId: 'CqX93czLUe2',
         url: 'https://instagram.com/p/CqX93czLUe2',
+      },
+    },
+    weight: 100,
+  },
+  LOOM_VIDEO: {
+    contentType: 'VIDEO',
+    domain: 'loom.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'videoId',
+      /^\/share\/(\w+)/u,
+      'https://www.loom.com/share/{{videoId}}',
+    ),
+    site: 'LOOM',
+    tests: {
+      'https://www.loom.com/share/1db1e88a454043b9a885016c5bd6053d': {
+        url: 'https://www.loom.com/share/1db1e88a454043b9a885016c5bd6053d',
+        videoId: '1db1e88a454043b9a885016c5bd6053d',
       },
     },
     weight: 100,
