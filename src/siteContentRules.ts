@@ -577,12 +577,17 @@ export const siteContentRules: {
     domain: 'drive.google.com',
     extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
       'folderId',
-      /^\/drive\/u\/0\/folders\/([\w-]+)/u,
+      /^\/drive\/u\/\d\/folders\/([\w-]+)/u,
       'https://drive.google.com/drive/folders/{{folderId}}',
     ),
     site: 'GOOGLE_DRIVE',
     tests: {
       'https://drive.google.com/drive/u/0/folders/1K5fBLsBcGVN8r1ldJLQWEPTF6Ll0yJ3w':
+        {
+          folderId: '1K5fBLsBcGVN8r1ldJLQWEPTF6Ll0yJ3w',
+          url: 'https://drive.google.com/drive/folders/1K5fBLsBcGVN8r1ldJLQWEPTF6Ll0yJ3w',
+        },
+      'https://drive.google.com/drive/u/1/folders/1K5fBLsBcGVN8r1ldJLQWEPTF6Ll0yJ3w':
         {
           folderId: '1K5fBLsBcGVN8r1ldJLQWEPTF6Ll0yJ3w',
           url: 'https://drive.google.com/drive/folders/1K5fBLsBcGVN8r1ldJLQWEPTF6Ll0yJ3w',
