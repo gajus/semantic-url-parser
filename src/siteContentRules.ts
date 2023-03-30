@@ -146,6 +146,19 @@ export type SiteContentInfo = {
     url: string;
     videoId: string;
   };
+  MEDIUM_ARTICLE: {
+    articleId: string;
+    contentType: 'ARTICLE';
+    site: 'MEDIUM';
+    url: string;
+    username: string;
+  };
+  MEDIUM_PROFILE: {
+    contentType: 'PROFILE';
+    site: 'MEDIUM';
+    url: string;
+    username: string;
+  };
   PINTEREST_PIN: {
     contentType: 'PIN';
     pinId: string;
@@ -816,6 +829,51 @@ export const siteContentRules: {
       'https://www.loom.com/share/1db1e88a454043b9a885016c5bd6053d': {
         url: 'https://www.loom.com/share/1db1e88a454043b9a885016c5bd6053d',
         videoId: '1db1e88a454043b9a885016c5bd6053d',
+      },
+    },
+    weight: 100,
+  },
+  MEDIUM_ARTICLE: {
+    contentType: 'ARTICLE',
+    domain: 'medium.com',
+    extractContentInfo: (url) => {
+      const [, username, articleId] =
+        /^\/([a-zA-Z\d]+)\/.*([a-f\d]{12})/u.exec(url.pathname) ?? [];
+
+      if (username && articleId) {
+        return {
+          articleId,
+          url: `https://medium.com/${username}/${articleId}`,
+          username,
+        };
+      }
+
+      return null;
+    },
+    site: 'MEDIUM',
+    tests: {
+      'https://medium.com/gajus/how-a-few-lines-of-code-reduced-database-load-by-a-few-million-queries-964d43ec668a':
+        {
+          articleId: '964d43ec668a',
+          url: 'https://medium.com/gajus/964d43ec668a',
+          username: 'gajus',
+        },
+    },
+    weight: 100,
+  },
+  MEDIUM_PROFILE: {
+    contentType: 'PROFILE',
+    domain: 'medium.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'username',
+      /^\/@([a-zA-Z\d]+)/u,
+      'https://medium.com/@{{username}}',
+    ),
+    site: 'MEDIUM',
+    tests: {
+      'https://medium.com/@james': {
+        url: 'https://medium.com/@james',
+        username: 'james',
       },
     },
     weight: 100,

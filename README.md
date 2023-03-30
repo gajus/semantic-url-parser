@@ -40,6 +40,7 @@ extractContentInfoFromUrl('https://soundcloud.com/strangehumman/kyoto-2?utm_sour
 * https://linkedin.com/
 * https://linktr.ee/
 * https://loom.com/
+* https://medium.com/
 * https://music.apple.com/
 * https://pinterest.com/
 * https://play.google.com/
