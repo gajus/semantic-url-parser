@@ -320,6 +320,19 @@ export type SiteContentInfo = {
     url: string;
     videoId: string;
   };
+  X_PROFILE: {
+    contentType: 'PROFILE';
+    site: 'X';
+    url: string;
+    username: string;
+  };
+  X_STATUS: {
+    contentType: 'STATUS';
+    site: 'X';
+    statusId: string;
+    url: string;
+    username: string;
+  };
   YOUTUBE_ABBREVIATED_CHANNEL: {
     contentType: 'CHANNEL';
     site: 'YOUTUBE';
@@ -1472,6 +1485,50 @@ export const siteContentRules: {
         },
     },
     weight: 100,
+  },
+  X_PROFILE: {
+    contentType: 'PROFILE',
+    domain: 'x.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'username',
+      /^\/([\w-]+)/u,
+      'https://x.com/{{username}}',
+    ),
+    site: 'X',
+    tests: {
+      'https://x.com/gajus': {
+        url: 'https://x.com/gajus',
+        username: 'gajus',
+      },
+    },
+    weight: 100,
+  },
+  X_STATUS: {
+    contentType: 'STATUS',
+    domain: 'x.com',
+    extractContentInfo: (url) => {
+      const [, username, statusId] =
+        /^\/(\w+)\/status\/(\d+)/u.exec(url.pathname) ?? [];
+
+      if (username && statusId) {
+        return {
+          statusId,
+          url: 'https://x.com/' + username + '/status/' + statusId,
+          username,
+        };
+      }
+
+      return null;
+    },
+    site: 'X',
+    tests: {
+      'https://x.com/kuizinas/status/1640770515114532872': {
+        statusId: '1640770515114532872',
+        url: 'https://x.com/kuizinas/status/1640770515114532872',
+        username: 'kuizinas',
+      },
+    },
+    weight: 90,
   },
   YOUTUBE_ABBREVIATED_CHANNEL: {
     contentType: 'CHANNEL',
