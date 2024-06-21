@@ -62,6 +62,18 @@ export type SiteContentInfo = {
     site: 'DROPBOX';
     url: string;
   };
+  FIGMA_BOARD: {
+    boardId: string;
+    contentType: 'BOARD';
+    site: 'FIGMA';
+    url: string;
+  };
+  FIGMA_DESIGN: {
+    contentType: 'DESIGN';
+    designId: string;
+    site: 'FIGMA';
+    url: string;
+  };
   FIGMA_FILE: {
     contentType: 'FILE';
     fileId: string;
@@ -658,6 +670,40 @@ export const siteContentRules: {
           fileId: '0l5rt7y8rdfgy9l',
           url: 'https://dropbox.com/s/0l5rt7y8rdfgy9l',
         },
+    },
+    weight: 100,
+  },
+  FIGMA_BOARD: {
+    contentType: 'BOARD',
+    domain: 'figma.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'boardId',
+      /^\/board\/([a-zA-Z\d]+)/u,
+      'https://figma.com/board/{{boardId}}',
+    ),
+    site: 'FIGMA',
+    tests: {
+      'https://www.figma.com/board/123456789/abc': {
+        boardId: '123456789',
+        url: 'https://figma.com/board/123456789',
+      },
+    },
+    weight: 100,
+  },
+  FIGMA_DESIGN: {
+    contentType: 'DESIGN',
+    domain: 'figma.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'designId',
+      /^\/design\/([a-zA-Z\d]+)/u,
+      'https://figma.com/design/{{designId}}',
+    ),
+    site: 'FIGMA',
+    tests: {
+      'https://www.figma.com/design/49P8UWLOadWskPwPvSz4bD/abc': {
+        designId: '49P8UWLOadWskPwPvSz4bD',
+        url: 'https://figma.com/design/49P8UWLOadWskPwPvSz4bD',
+      },
     },
     weight: 100,
   },
