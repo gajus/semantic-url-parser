@@ -44,6 +44,18 @@ export type SiteContentInfo = {
     url: string;
     username: string;
   };
+  CODESANDBOX_DEVBOX: {
+    contentType: 'DEVBOX';
+    sandboxId: string;
+    site: 'CODESANDBOX';
+    url: string;
+  };
+  CODESANDBOX_SANDBOX: {
+    contentType: 'SANDBOX';
+    sandboxId: string;
+    site: 'CODESANDBOX';
+    url: string;
+  };
   DESCRIPT_PROJECT: {
     contentType: 'PROJECT';
     projectId: string;
@@ -109,6 +121,13 @@ export type SiteContentInfo = {
   FIVERR_PROFILE: {
     contentType: 'PROFILE';
     site: 'FIVERR';
+    url: string;
+    username: string;
+  };
+  GITHUB_GIST: {
+    contentType: 'GIST';
+    gistId: string;
+    site: 'GITHUB';
     url: string;
     username: string;
   };
@@ -240,6 +259,13 @@ export type SiteContentInfo = {
     url: string;
     username: string;
   };
+  REPLIT_REPL: {
+    contentType: 'REPL';
+    replId: string;
+    site: 'REPLIT';
+    url: string;
+    username: string;
+  };
   RIVE_FILE: {
     contentType: 'FILE';
     fileId: string;
@@ -293,6 +319,12 @@ export type SiteContentInfo = {
     audioTrackId: string;
     contentType: 'AUDIO_TRACK';
     site: 'SPOTIFY';
+    url: string;
+  };
+  STACKBLITZ_PROJECT: {
+    contentType: 'PROJECT';
+    projectId: string;
+    site: 'STACKBLITZ';
     url: string;
   };
   TIKTOK_PROFILE: {
@@ -640,6 +672,40 @@ export const siteContentRules: {
     },
     weight: 100,
   },
+  CODESANDBOX_DEVBOX: {
+    contentType: 'DEVBOX',
+    domain: 'codesandbox.io',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'sandboxId',
+      /^\/p\/devbox\/([\w-]+)/u,
+      'https://codesandbox.io/p/devbox/{{sandboxId}}',
+    ),
+    site: 'CODESANDBOX',
+    tests: {
+      'https://codesandbox.io/p/devbox/foo-bar-4q1m9?file=%2Fsrc%2Findex.js': {
+        sandboxId: 'foo-bar-4q1m9',
+        url: 'https://codesandbox.io/p/devbox/foo-bar-4q1m9',
+      },
+    },
+    weight: 100,
+  },
+  CODESANDBOX_SANDBOX: {
+    contentType: 'SANDBOX',
+    domain: 'codesandbox.io',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'sandboxId',
+      /^\/p\/sandbox\/([\w-]+)/u,
+      'https://codesandbox.io/p/sandbox/{{sandboxId}}',
+    ),
+    site: 'CODESANDBOX',
+    tests: {
+      'https://codesandbox.io/p/sandbox/foo-bar-4q1m9?file=%2Fsrc%2Findex.js': {
+        sandboxId: 'foo-bar-4q1m9',
+        url: 'https://codesandbox.io/p/sandbox/foo-bar-4q1m9',
+      },
+    },
+    weight: 100,
+  },
   DESCRIPT_PROJECT: {
     contentType: 'PROJECT',
     domain: 'share.descript.com',
@@ -845,6 +911,33 @@ export const siteContentRules: {
     tests: {
       'https://www.fiverr.com/gajus': {
         url: 'https://fiverr.com/gajus',
+        username: 'gajus',
+      },
+    },
+    weight: 100,
+  },
+  GITHUB_GIST: {
+    contentType: 'GIST',
+    domain: 'gist.github.com',
+    extractContentInfo: (url) => {
+      const [, username, gistId] =
+        /^\/([\w-]+)\/(\d+)/u.exec(url.pathname) ?? [];
+
+      if (username && gistId) {
+        return {
+          gistId,
+          url: 'https://gist.github.com/' + username + '/' + gistId,
+          username,
+        };
+      }
+
+      return null;
+    },
+    site: 'GITHUB',
+    tests: {
+      'https://gist.github.com/gajus/554280/': {
+        gistId: '554280',
+        url: 'https://gist.github.com/gajus/554280',
         username: 'gajus',
       },
     },
@@ -1266,6 +1359,33 @@ export const siteContentRules: {
     },
     weight: 100,
   },
+  REPLIT_REPL: {
+    contentType: 'REPL',
+    domain: 'replit.com',
+    extractContentInfo: (url) => {
+      const [, username, replId] =
+        /^\/@([\w-]+)\/([\w-]+)/u.exec(url.pathname) ?? [];
+
+      if (username && replId) {
+        return {
+          replId,
+          url: 'https://replit.com/@' + username + '/' + replId,
+          username,
+        };
+      }
+
+      return null;
+    },
+    site: 'REPLIT',
+    tests: {
+      'https://replit.com/@gajus/my-repl#index.ts': {
+        replId: 'my-repl',
+        url: 'https://replit.com/@gajus/my-repl',
+        username: 'gajus',
+      },
+    },
+    weight: 100,
+  },
   RIVE_FILE: {
     contentType: 'FILE',
     domain: 'rive.app',
@@ -1426,6 +1546,23 @@ export const siteContentRules: {
       'https://open.spotify.com/track/5uj0ZKm9chQRqB6mWKl4Uu': {
         audioTrackId: '5uj0ZKm9chQRqB6mWKl4Uu',
         url: 'https://open.spotify.com/track/5uj0ZKm9chQRqB6mWKl4Uu',
+      },
+    },
+    weight: 100,
+  },
+  STACKBLITZ_PROJECT: {
+    contentType: 'PROJECT',
+    domain: 'stackblitz.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'projectId',
+      /^\/edit\/([\w-]+)/u,
+      'https://stackblitz.com/edit/{{projectId}}',
+    ),
+    site: 'STACKBLITZ',
+    tests: {
+      'https://stackblitz.com/edit/react-ts': {
+        projectId: 'react-ts',
+        url: 'https://stackblitz.com/edit/react-ts',
       },
     },
     weight: 100,
