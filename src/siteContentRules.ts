@@ -44,6 +44,12 @@ export type SiteContentInfo = {
     url: string;
     username: string;
   };
+  DESCRIPT_PROJECT: {
+    contentType: 'PROJECT';
+    projectId: string;
+    site: 'DESCRIPT';
+    url: string;
+  };
   DRIBBBLE_PROFILE: {
     contentType: 'PROFILE';
     site: 'DRIBBBLE';
@@ -61,6 +67,13 @@ export type SiteContentInfo = {
     fileId: string;
     site: 'DROPBOX';
     url: string;
+  };
+  FACEBOOK_POST: {
+    contentType: 'POST';
+    postId: string;
+    site: 'FACEBOOK';
+    url: string;
+    username: string;
   };
   FIGMA_BOARD: {
     boardId: string;
@@ -227,12 +240,24 @@ export type SiteContentInfo = {
     url: string;
     username: string;
   };
+  RIVE_FILE: {
+    contentType: 'FILE';
+    fileId: string;
+    site: 'RIVE';
+    url: string;
+  };
   SOUNDCLOUD_TRACK: {
     audioTrackId: string;
     contentType: 'AUDIO_TRACK';
     site: 'SOUNDCLOUD';
     url: string;
     username: string;
+  };
+  SPLINE_FILE: {
+    contentType: 'FILE';
+    fileId: string;
+    site: 'SPLINE';
+    url: string;
   };
   SPOTIFY_ALBUM: {
     albumId: string;
@@ -570,23 +595,20 @@ export const siteContentRules: {
     domain: 'canva.com',
     extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
       'designId',
-      // TODO I am not clear what the two IDs map to.
-      // I have confirmed as much that the first one is not a user ID, i.e.
-      // If the same user created two designs, the first ID is not the same.
-      /^\/design\/([\w-]+\/[\w-]+)/u,
+      /^\/design\/([\w-]+)/u,
       'https://canva.com/design/{{designId}}/view',
     ),
     site: 'CANVA',
     tests: {
       'https://www.canva.com/design/DAC1xq2GJMk/hIMpX3mPUmYkmNshGT0ZEw/view?utm_content=DAC1xq2GJMk&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink':
         {
-          designId: 'DAC1xq2GJMk/hIMpX3mPUmYkmNshGT0ZEw',
-          url: 'https://canva.com/design/DAC1xq2GJMk/hIMpX3mPUmYkmNshGT0ZEw/view',
+          designId: 'DAC1xq2GJMk',
+          url: 'https://canva.com/design/DAC1xq2GJMk/view',
         },
       'https://www.canva.com/design/DAE_HVNSl10/nZqb-SL59cV6Unj5Xd3y_w/view?utm_content=DAE_HVNSl10&utm_campaign=designshare&utm_medium=link&utm_source=homepage_design_menu':
         {
-          designId: 'DAE_HVNSl10/nZqb-SL59cV6Unj5Xd3y_w',
-          url: 'https://canva.com/design/DAE_HVNSl10/nZqb-SL59cV6Unj5Xd3y_w/view',
+          designId: 'DAE_HVNSl10',
+          url: 'https://canva.com/design/DAE_HVNSl10/view',
         },
     },
     weight: 100,
@@ -614,6 +636,23 @@ export const siteContentRules: {
         penId: 'RwBZJEx',
         url: 'https://codepen.io/Ashish-Nagvanshi/pen/RwBZJEx',
         username: 'Ashish-Nagvanshi',
+      },
+    },
+    weight: 100,
+  },
+  DESCRIPT_PROJECT: {
+    contentType: 'PROJECT',
+    domain: 'share.descript.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'projectId',
+      /^\/view\/([\w-]+)/u,
+      'https://share.descript.com/view/{{projectId}}',
+    ),
+    site: 'DESCRIPT',
+    tests: {
+      'https://share.descript.com/view/xIqYqkJT151/': {
+        projectId: 'xIqYqkJT151',
+        url: 'https://share.descript.com/view/xIqYqkJT151',
       },
     },
     weight: 100,
@@ -670,6 +709,33 @@ export const siteContentRules: {
           fileId: '0l5rt7y8rdfgy9l',
           url: 'https://dropbox.com/s/0l5rt7y8rdfgy9l',
         },
+    },
+    weight: 100,
+  },
+  FACEBOOK_POST: {
+    contentType: 'POST',
+    domain: 'facebook.com',
+    extractContentInfo: (url) => {
+      const [, username, postId] =
+        /^\/([\w-]+)\/posts\/(\d+)/u.exec(url.pathname) ?? [];
+
+      if (username && postId) {
+        return {
+          postId,
+          url: 'https://facebook.com/' + username + '/posts/' + postId,
+          username,
+        };
+      }
+
+      return null;
+    },
+    site: 'FACEBOOK',
+    tests: {
+      'https://www.facebook.com/andrewismusic/posts/451971596293956': {
+        postId: '451971596293956',
+        url: 'https://facebook.com/andrewismusic/posts/451971596293956',
+        username: 'andrewismusic',
+      },
     },
     weight: 100,
   },
@@ -1200,6 +1266,23 @@ export const siteContentRules: {
     },
     weight: 100,
   },
+  RIVE_FILE: {
+    contentType: 'FILE',
+    domain: 'rive.app',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'fileId',
+      /^\/s\/(\w+)/u,
+      'https://rive.app/s/{{fileId}}/embed',
+    ),
+    site: 'RIVE',
+    tests: {
+      'https://rive.app/s/M3YTybD7WU2EDRKOXqVvuw/': {
+        fileId: 'M3YTybD7WU2EDRKOXqVvuw',
+        url: 'https://rive.app/s/M3YTybD7WU2EDRKOXqVvuw/embed',
+      },
+    },
+    weight: 100,
+  },
   SOUNDCLOUD_TRACK: {
     contentType: 'AUDIO_TRACK',
     domain: 'soundcloud.com',
@@ -1225,6 +1308,23 @@ export const siteContentRules: {
           url: 'https://soundcloud.com/strangehumman/kyoto-2',
           username: 'strangehumman',
         },
+    },
+    weight: 100,
+  },
+  SPLINE_FILE: {
+    contentType: 'FILE',
+    domain: 'app.spline.design',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'fileId',
+      /^\/file\/([\w-]+)/u,
+      'https://app.spline.design/file/{{fileId}}',
+    ),
+    site: 'SPLINE',
+    tests: {
+      'https://app.spline.design/file/fe48d7e7-adac-4ab7-8100-67e5f4bc9bbd/': {
+        fileId: 'fe48d7e7-adac-4ab7-8100-67e5f4bc9bbd',
+        url: 'https://app.spline.design/file/fe48d7e7-adac-4ab7-8100-67e5f4bc9bbd',
+      },
     },
     weight: 100,
   },
