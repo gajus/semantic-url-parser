@@ -279,8 +279,14 @@ export type SiteContentInfo = {
     url: string;
     username: string;
   };
-  SPLINE_FILE: {
+  SPLINE_SHARED_FILE: {
     contentType: 'FILE';
+    fileId: string;
+    site: 'SPLINE';
+    url: string;
+  };
+  SPLINE_VIEWER_FILE: {
+    contentType: 'VIEWER_FILE';
     fileId: string;
     site: 'SPLINE';
     url: string;
@@ -627,20 +633,23 @@ export const siteContentRules: {
     domain: 'canva.com',
     extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
       'designId',
-      /^\/design\/([\w-]+)/u,
+      // TODO I am not clear what the two IDs map to.
+      // I have confirmed as much that the first one is not a user ID, i.e.
+      // If the same user created two designs, the first ID is not the same.
+      /^\/design\/([\w-]+\/[\w-]+)/u,
       'https://canva.com/design/{{designId}}/view',
     ),
     site: 'CANVA',
     tests: {
       'https://www.canva.com/design/DAC1xq2GJMk/hIMpX3mPUmYkmNshGT0ZEw/view?utm_content=DAC1xq2GJMk&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink':
         {
-          designId: 'DAC1xq2GJMk',
-          url: 'https://canva.com/design/DAC1xq2GJMk/view',
+          designId: 'DAC1xq2GJMk/hIMpX3mPUmYkmNshGT0ZEw',
+          url: 'https://canva.com/design/DAC1xq2GJMk/hIMpX3mPUmYkmNshGT0ZEw/view',
         },
       'https://www.canva.com/design/DAE_HVNSl10/nZqb-SL59cV6Unj5Xd3y_w/view?utm_content=DAE_HVNSl10&utm_campaign=designshare&utm_medium=link&utm_source=homepage_design_menu':
         {
-          designId: 'DAE_HVNSl10',
-          url: 'https://canva.com/design/DAE_HVNSl10/view',
+          designId: 'DAE_HVNSl10/nZqb-SL59cV6Unj5Xd3y_w',
+          url: 'https://canva.com/design/DAE_HVNSl10/nZqb-SL59cV6Unj5Xd3y_w/view',
         },
     },
     weight: 100,
@@ -783,7 +792,7 @@ export const siteContentRules: {
     domain: 'facebook.com',
     extractContentInfo: (url) => {
       const [, username, postId] =
-        /^\/([\w-]+)\/posts\/(\d+)/u.exec(url.pathname) ?? [];
+        /^\/([\w-]+)\/posts\/(\w+)/u.exec(url.pathname) ?? [];
 
       if (username && postId) {
         return {
@@ -921,7 +930,7 @@ export const siteContentRules: {
     domain: 'gist.github.com',
     extractContentInfo: (url) => {
       const [, username, gistId] =
-        /^\/([\w-]+)\/(\d+)/u.exec(url.pathname) ?? [];
+        /^\/([\w-]+)\/(\w+)/u.exec(url.pathname) ?? [];
 
       if (username && gistId) {
         return {
@@ -1431,19 +1440,36 @@ export const siteContentRules: {
     },
     weight: 100,
   },
-  SPLINE_FILE: {
+  SPLINE_SHARED_FILE: {
     contentType: 'FILE',
-    domain: 'app.spline.design',
+    domain: 'my.spline.design',
     extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
       'fileId',
-      /^\/file\/([\w-]+)/u,
-      'https://app.spline.design/file/{{fileId}}',
+      /^\/([\w-]+)/u,
+      'https://my.spline.design/{{fileId}}',
     ),
     site: 'SPLINE',
     tests: {
-      'https://app.spline.design/file/fe48d7e7-adac-4ab7-8100-67e5f4bc9bbd/': {
-        fileId: 'fe48d7e7-adac-4ab7-8100-67e5f4bc9bbd',
-        url: 'https://app.spline.design/file/fe48d7e7-adac-4ab7-8100-67e5f4bc9bbd',
+      'https://my.spline.design/cubescroll-381f86b8554fa7f705a477b70711fa59/': {
+        fileId: 'cubescroll-381f86b8554fa7f705a477b70711fa59',
+        url: 'https://my.spline.design/cubescroll-381f86b8554fa7f705a477b70711fa59',
+      },
+    },
+    weight: 100,
+  },
+  SPLINE_VIEWER_FILE: {
+    contentType: 'VIEWER_FILE',
+    domain: 'prod.spline.design',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'fileId',
+      /^\/([\w-]+)/u,
+      'https://prod.spline.design/{{fileId}}/scene.splinecode',
+    ),
+    site: 'SPLINE',
+    tests: {
+      'https://prod.spline.design/WSzYLJlGageCs5Bt/scene.splinecode': {
+        fileId: 'WSzYLJlGageCs5Bt',
+        url: 'https://prod.spline.design/WSzYLJlGageCs5Bt/scene.splinecode',
       },
     },
     weight: 100,
