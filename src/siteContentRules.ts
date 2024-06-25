@@ -1492,7 +1492,7 @@ export const siteContentRules: {
     domain: /(^|\.)linkedin.com$/u,
     extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
       'username',
-      /^\/company\/([a-zA-Z\d]+)/u,
+      /^\/company\/([\w-]+)/u,
       'https://linkedin.com/company/{{username}}',
     ),
     formatUrl: ({ username }) => {
