@@ -251,8 +251,8 @@ export type SiteContentInfo = {
     url: string;
     urlVariant: 'DEFAULT';
   };
-  'LINKEDIN.PROFILE.DEFAULT': {
-    contentType: 'PROFILE';
+  'LINKEDIN.PERSON_PROFILE.DEFAULT': {
+    contentType: 'PERSON_PROFILE';
     profileId: string;
     site: 'LINKEDIN';
     url: string;
@@ -1453,8 +1453,8 @@ export const siteContentRules: {
     urlVariant: 'DEFAULT',
     weight: 100,
   },
-  'LINKEDIN.PROFILE.DEFAULT': {
-    contentType: 'PROFILE',
+  'LINKEDIN.PERSON_PROFILE.DEFAULT': {
+    contentType: 'PERSON_PROFILE',
     domain: /(^|\.)linkedin.com$/u,
     extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
       'profileId',
