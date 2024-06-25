@@ -26,6 +26,21 @@ extractContentInfoFromUrl('https://soundcloud.com/strangehumman/kyoto-2?utm_sour
 // }
 ```
 
+## Formatting Content Info into URL
+
+```ts
+import { formatContentInfoIntoUrl } from 'semantic-url-parser';
+
+formatContentInfoIntoUrl({
+  contentType: 'VIDEO',
+  site: 'YOUTUBE',
+  urlVariant: 'DEFAULT',
+  videoId: '8Qn_spdM5Zg',
+});
+
+// https://www.youtube.com/watch?v=8Qn_spdM5Zg
+```
+
 ## Supported Sites
 
 * https://apps.apple.com/

@@ -1,4 +1,5 @@
 import { extractContentInfoFromUrl } from './extractContentInfoFromUrl';
+import { formatContentInfoIntoUrl } from './formatContentInfoIntoUrl';
 import { siteContentRules } from './siteContentRules';
 import { expect, it } from 'vitest';
 
@@ -6,6 +7,10 @@ for (const [siteContentId, { contentType, tests, site }] of Object.entries(
   siteContentRules,
 )) {
   for (const [inputUrl, attributes] of Object.entries(tests)) {
+    // if (siteContentId !== 'YOUTUBE_ABBREVIATED_CHANNEL') {
+    //   continue;
+    // }
+
     it(
       '[' +
         siteContentId +
@@ -31,6 +36,23 @@ for (const [siteContentId, { contentType, tests, site }] of Object.entries(
         for (const [key, value] of Object.entries(attributes)) {
           expect(contentInfo?.[key]).toBe(value);
         }
+      },
+    );
+
+    it(
+      '[' +
+        siteContentId +
+        '] formats content info into URL (' +
+        inputUrl +
+        ')',
+      () => {
+        const contentInfo = extractContentInfoFromUrl(inputUrl);
+
+        if (contentInfo === null) {
+          return;
+        }
+
+        expect(formatContentInfoIntoUrl(contentInfo)).toBe(attributes.url);
       },
     );
   }

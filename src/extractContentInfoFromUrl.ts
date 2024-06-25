@@ -28,6 +28,7 @@ export const extractContentInfoFromUrl = (inputUrl: string) => {
     return {
       contentType: instructions.contentType,
       site: instructions.site,
+      urlVariant: instructions.urlVariant,
       ...attributes,
     } as SiteContentInfo[keyof SiteContentInfo];
   }
