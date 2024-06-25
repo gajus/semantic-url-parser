@@ -424,18 +424,18 @@ export type SiteContentInfo = {
     urlVariant: 'DEFAULT';
     username: string;
   };
-  'UPWORK.PERSON_PROFILE_ID.DEFAULT': {
-    contentType: 'PERSON_PROFILE_ID';
+  'UPWORK.PERSON_PROFILE.ID': {
+    contentType: 'PERSON_PROFILE';
     freelancerId: string;
     site: 'UPWORK';
     url: string;
-    urlVariant: 'DEFAULT';
+    urlVariant: 'ID';
   };
-  'UPWORK.PERSON_PROFILE_USERNAME.DEFAULT': {
-    contentType: 'PERSON_PROFILE_USERNAME';
+  'UPWORK.PERSON_PROFILE.USERNAME': {
+    contentType: 'PERSON_PROFILE';
     site: 'UPWORK';
     url: string;
-    urlVariant: 'DEFAULT';
+    urlVariant: 'USERNAME';
     username: string;
   };
   'VIMEO.MANAGE_VIDEO.DEFAULT': {
@@ -2023,8 +2023,8 @@ export const siteContentRules: {
     urlVariant: 'DEFAULT',
     weight: 90,
   },
-  'UPWORK.PERSON_PROFILE_ID.DEFAULT': {
-    contentType: 'PERSON_PROFILE_ID',
+  'UPWORK.PERSON_PROFILE.ID': {
+    contentType: 'PERSON_PROFILE',
     domain: 'upwork.com',
     extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
       'freelancerId',
@@ -2041,11 +2041,11 @@ export const siteContentRules: {
         url: 'https://www.upwork.com/freelancers/~01eb5e04f87efe1f1d',
       },
     },
-    urlVariant: 'DEFAULT',
+    urlVariant: 'ID',
     weight: 90,
   },
-  'UPWORK.PERSON_PROFILE_USERNAME.DEFAULT': {
-    contentType: 'PERSON_PROFILE_USERNAME',
+  'UPWORK.PERSON_PROFILE.USERNAME': {
+    contentType: 'PERSON_PROFILE',
     domain: 'upwork.com',
     extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
       'username',
@@ -2062,7 +2062,7 @@ export const siteContentRules: {
         username: 'miroslavt',
       },
     },
-    urlVariant: 'DEFAULT',
+    urlVariant: 'USERNAME',
     weight: 100,
   },
   'VIMEO.MANAGE_VIDEO.DEFAULT': {
@@ -2356,7 +2356,7 @@ export const siteContentRules: {
     extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
       'videoId',
       /^\/([\w-]+)/u,
-      'https://youtube.com/watch?v={{videoId}}',
+      'https://youtu.be/{{videoId}}',
     ),
     formatUrl: ({ videoId }) => {
       return `https://youtu.be/${videoId}`;
@@ -2364,7 +2364,7 @@ export const siteContentRules: {
     site: 'YOUTUBE',
     tests: {
       'https://youtu.be/1JppVnu8-pI': {
-        url: 'https://youtube.com/watch?v=1JppVnu8-pI',
+        url: 'https://youtu.be/1JppVnu8-pI',
         videoId: '1JppVnu8-pI',
       },
     },
