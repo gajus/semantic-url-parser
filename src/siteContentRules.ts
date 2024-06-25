@@ -244,19 +244,19 @@ export type SiteContentInfo = {
     url: string;
     urlVariant: 'DEFAULT';
   };
-  'LINKEDIN.COMPANY_PROFILE.DEFAULT': {
-    contentType: 'COMPANY_PROFILE';
-    site: 'LINKEDIN';
-    url: string;
-    urlVariant: 'DEFAULT';
-    username: string;
-  };
   'LINKEDIN.FEED_POST.DEFAULT': {
     contentType: 'FEED_POST';
     postId: string;
     site: 'LINKEDIN';
     url: string;
     urlVariant: 'DEFAULT';
+  };
+  'LINKEDIN.ORGANIZATION_PROFILE.DEFAULT': {
+    contentType: 'ORGANIZATION_PROFILE';
+    site: 'LINKEDIN';
+    url: string;
+    urlVariant: 'DEFAULT';
+    username: string;
   };
   'LINKEDIN.PERSON_PROFILE.DEFAULT': {
     contentType: 'PERSON_PROFILE';
@@ -1439,27 +1439,6 @@ export const siteContentRules: {
     urlVariant: 'DEFAULT',
     weight: 100,
   },
-  'LINKEDIN.COMPANY_PROFILE.DEFAULT': {
-    contentType: 'COMPANY_PROFILE',
-    domain: /(^|\.)linkedin.com$/u,
-    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
-      'username',
-      /^\/company\/([a-zA-Z\d]+)/u,
-      'https://linkedin.com/company/{{username}}',
-    ),
-    formatUrl: ({ username }) => {
-      return `https://linkedin.com/company/${username}`;
-    },
-    site: 'LINKEDIN',
-    tests: {
-      'https://www.linkedin.com/company/linkedin': {
-        url: 'https://linkedin.com/company/linkedin',
-        username: 'linkedin',
-      },
-    },
-    urlVariant: 'DEFAULT',
-    weight: 100,
-  },
   'LINKEDIN.FEED_POST.DEFAULT': {
     contentType: 'FEED_POST',
     domain: 'linkedin.com',
@@ -1478,6 +1457,27 @@ export const siteContentRules: {
           postId: '6927611303767212032',
           url: 'https://www.linkedin.com/feed/update/urn:li:activity:6927611303767212032/',
         },
+    },
+    urlVariant: 'DEFAULT',
+    weight: 100,
+  },
+  'LINKEDIN.ORGANIZATION_PROFILE.DEFAULT': {
+    contentType: 'ORGANIZATION_PROFILE',
+    domain: /(^|\.)linkedin.com$/u,
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'username',
+      /^\/company\/([a-zA-Z\d]+)/u,
+      'https://linkedin.com/company/{{username}}',
+    ),
+    formatUrl: ({ username }) => {
+      return `https://linkedin.com/company/${username}`;
+    },
+    site: 'LINKEDIN',
+    tests: {
+      'https://www.linkedin.com/company/linkedin': {
+        url: 'https://linkedin.com/company/linkedin',
+        username: 'linkedin',
+      },
     },
     urlVariant: 'DEFAULT',
     weight: 100,
