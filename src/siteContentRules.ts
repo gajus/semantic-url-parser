@@ -541,6 +541,7 @@ export type SiteContentInfo = {
 
 export type Site = SiteContentInfo[keyof SiteContentInfo]['site'];
 export type ContentType = SiteContentInfo[keyof SiteContentInfo]['contentType'];
+export type UrlVariant = SiteContentInfo[keyof SiteContentInfo]['urlVariant'];
 
 type SiteContentInfoExtractor<T> = (
   url: URL,
