@@ -101,6 +101,13 @@ export type SiteContentInfo = {
     urlVariant: 'DEFAULT';
     username: string;
   };
+  'FACEBOOK.PROFILE.DEFAULT': {
+    contentType: 'PROFILE';
+    site: 'FACEBOOK';
+    url: string;
+    urlVariant: 'DEFAULT';
+    username: string;
+  };
   'FIGMA.BOARD.DEFAULT': {
     boardId: string;
     contentType: 'BOARD';
@@ -954,6 +961,25 @@ export const siteContentRules: {
         postId: '451971596293956',
         url: 'https://facebook.com/andrewismusic/posts/451971596293956',
         username: 'andrewismusic',
+      },
+    },
+    urlVariant: 'DEFAULT',
+    weight: 100,
+  },
+  'FACEBOOK.PROFILE.DEFAULT': {
+    contentType: 'PROFILE',
+    domain: 'facebook.com',
+    extractContentInfo: createUsernameContentInfoExtractor(
+      'https://facebook.com/{{username}}',
+    ),
+    formatUrl: ({ username }) => {
+      return `https://facebook.com/${username}`;
+    },
+    site: 'FACEBOOK',
+    tests: {
+      'https://www.facebook.com/gajus': {
+        url: 'https://facebook.com/gajus',
+        username: 'gajus',
       },
     },
     urlVariant: 'DEFAULT',
