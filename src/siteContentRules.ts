@@ -523,11 +523,11 @@ export type SiteContentInfo = {
     urlVariant: 'DEFAULT';
     videoId: string;
   };
-  'YOUTUBE.VIDEO_SHORT_URL': {
+  'YOUTUBE.VIDEO.SHORT_URL': {
     contentType: 'VIDEO';
     site: 'YOUTUBE';
     url: string;
-    urlVariant: 'DEFAULT';
+    urlVariant: 'SHORT_URL';
     videoId: string;
   };
 };
@@ -2203,7 +2203,6 @@ export const siteContentRules: {
       },
     },
     urlVariant: 'ABBREVIATED',
-    urlVariant: 'ABBREVIATED',
     weight: 90,
   },
   'YOUTUBE.CHANNEL.AT': {
@@ -2225,7 +2224,6 @@ export const siteContentRules: {
       },
     },
     urlVariant: 'AT',
-    urlVariant: 'AT',
     weight: 90,
   },
   'YOUTUBE.CHANNEL.BARE': {
@@ -2244,7 +2242,6 @@ export const siteContentRules: {
         username: 'aatishgnair',
       },
     },
-    urlVariant: 'BARE',
     urlVariant: 'BARE',
     weight: 120,
   },
@@ -2266,7 +2263,6 @@ export const siteContentRules: {
         url: 'https://youtube.com/channel/UC_8cM2OFz5rUTNskqehzLEg',
       },
     },
-    urlVariant: 'FOLDER',
     urlVariant: 'FOLDER',
     weight: 100,
   },
@@ -2354,7 +2350,7 @@ export const siteContentRules: {
     urlVariant: 'DEFAULT',
     weight: 100,
   },
-  'YOUTUBE.VIDEO_SHORT_URL.DEFAULT': {
+  'YOUTUBE.VIDEO.SHORT_URL': {
     contentType: 'VIDEO',
     domain: 'youtu.be',
     extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
@@ -2372,7 +2368,7 @@ export const siteContentRules: {
         videoId: '1JppVnu8-pI',
       },
     },
-    urlVariant: 'DEFAULT',
+    urlVariant: 'SHORT_URL',
     weight: 100,
   },
 };
