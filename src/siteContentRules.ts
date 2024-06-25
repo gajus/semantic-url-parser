@@ -244,6 +244,13 @@ export type SiteContentInfo = {
     url: string;
     urlVariant: 'DEFAULT';
   };
+  'LINKEDIN.COMPANY_PROFILE.DEFAULT': {
+    contentType: 'COMPANY_PROFILE';
+    site: 'LINKEDIN';
+    url: string;
+    urlVariant: 'DEFAULT';
+    username: string;
+  };
   'LINKEDIN.FEED_POST.DEFAULT': {
     contentType: 'FEED_POST';
     postId: string;
@@ -1426,6 +1433,27 @@ export const siteContentRules: {
       'https://www.instagram.com/reel/Cbz20_0j2m4/': {
         reelId: 'Cbz20_0j2m4',
         url: 'https://instagram.com/reel/Cbz20_0j2m4',
+      },
+    },
+    urlVariant: 'DEFAULT',
+    weight: 100,
+  },
+  'LINKEDIN.COMPANY_PROFILE.DEFAULT': {
+    contentType: 'COMPANY_PROFILE',
+    domain: /(^|\.)linkedin.com$/u,
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'username',
+      /^\/company\/([a-zA-Z\d]+)/u,
+      'https://linkedin.com/company/{{username}}',
+    ),
+    formatUrl: ({ username }) => {
+      return `https://linkedin.com/company/${username}`;
+    },
+    site: 'LINKEDIN',
+    tests: {
+      'https://www.linkedin.com/company/linkedin': {
+        url: 'https://linkedin.com/company/linkedin',
+        username: 'linkedin',
       },
     },
     urlVariant: 'DEFAULT',
