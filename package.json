@@ -21,6 +21,12 @@
   "engines": {
     "node": ">=18"
   },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "files": [
     "./src",
     "./dist"
