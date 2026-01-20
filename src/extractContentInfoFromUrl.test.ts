@@ -52,7 +52,7 @@ for (const [siteContentId, { contentType, tests, site }] of Object.entries(
           return;
         }
 
-        expect(formatContentInfoIntoUrl(contentInfo)).toBe(attributes.url);
+        expect(formatContentInfoIntoUrl(contentInfo)).toBe(attributes?.url);
       },
     );
   }

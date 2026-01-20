@@ -151,6 +151,12 @@ export type SiteContentInfo = {
     urlVariant: 'DEFAULT';
     username: string;
   };
+  'FRAMER.APP.DEFAULT': {
+    contentType: 'APP';
+    site: 'FRAMER';
+    url: string;
+    urlVariant: 'DEFAULT';
+  };
   'GITHUB.GIST.DEFAULT': {
     contentType: 'GIST';
     gistId: string;
@@ -1136,6 +1142,56 @@ export const siteContentRules: {
       'https://www.fiverr.com/gajus': {
         url: 'https://fiverr.com/gajus',
         username: 'gajus',
+      },
+    },
+    urlVariant: 'DEFAULT',
+    weight: 100,
+  },
+  'FRAMER.APP.DEFAULT': {
+    contentType: 'APP',
+    domain: /(^|\.)(framer\.app|framer\.website|learnframer\.site)$/u,
+    extractContentInfo: (url) => {
+      // Normalize to framer.app (default domain)
+      let normalizedHostname = url.hostname;
+      if (normalizedHostname.endsWith('.framer.website')) {
+        normalizedHostname = normalizedHostname.replace(
+          '.framer.website',
+          '.framer.app',
+        );
+      } else if (normalizedHostname.endsWith('.learnframer.site')) {
+        normalizedHostname = normalizedHostname.replace(
+          '.learnframer.site',
+          '.framer.app',
+        );
+      }
+
+      const pathname = url.pathname === '/' ? '' : url.pathname;
+      const normalizedUrl =
+        url.protocol + '//' + normalizedHostname + pathname + url.search;
+
+      return {
+        url: normalizedUrl,
+      };
+    },
+    formatUrl: ({ url }) => {
+      return url;
+    },
+    site: 'FRAMER',
+    tests: {
+      'https://example.framer.app': {
+        url: 'https://example.framer.app',
+      },
+      'https://example.framer.app/path/to/page': {
+        url: 'https://example.framer.app/path/to/page',
+      },
+      'https://example.framer.website': {
+        url: 'https://example.framer.app',
+      },
+      'https://example.framer.website/path/to/page': {
+        url: 'https://example.framer.app/path/to/page',
+      },
+      'https://example.learnframer.site': {
+        url: 'https://example.framer.app',
       },
     },
     urlVariant: 'DEFAULT',
