@@ -1477,6 +1477,7 @@ export const siteContentRules: {
     domain: 'instagram.com',
     extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
       'postId',
+      // eslint-disable-next-line unicorn/no-unsafe-regex
       /^(?:\/[\w.-]+)?\/p\/([a-zA-Z\d]+)/u,
       'https://instagram.com/p/{{postId}}',
     ),
