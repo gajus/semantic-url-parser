@@ -1477,7 +1477,7 @@ export const siteContentRules: {
     domain: 'instagram.com',
     extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
       'postId',
-      /^\/p\/([a-zA-Z\d]+)/u,
+      /^(?:\/[\w.-]+)?\/p\/([a-zA-Z\d]+)/u,
       'https://instagram.com/p/{{postId}}',
     ),
     formatUrl: ({ postId }) => {
@@ -1492,6 +1492,10 @@ export const siteContentRules: {
       'https://www.instagram.com/p/CqX93czLUe2/?utm_source=ig_web_copy_link': {
         postId: 'CqX93czLUe2',
         url: 'https://instagram.com/p/CqX93czLUe2',
+      },
+      'https://www.instagram.com/yorkhouseflowers/p/DOo2pJGDzlq/': {
+        postId: 'DOo2pJGDzlq',
+        url: 'https://instagram.com/p/DOo2pJGDzlq',
       },
     },
     urlVariant: 'DEFAULT',
