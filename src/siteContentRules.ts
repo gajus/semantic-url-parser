@@ -136,6 +136,13 @@ export type SiteContentInfo = {
     url: string;
     urlVariant: 'DEFAULT';
   };
+  'FIGMA.SLIDES.DEFAULT': {
+    contentType: 'SLIDES';
+    site: 'FIGMA';
+    slidesId: string;
+    url: string;
+    urlVariant: 'DEFAULT';
+  };
   'FIVERR.GIG.DEFAULT': {
     contentType: 'GIG';
     gigId: string;
@@ -774,19 +781,47 @@ export const siteContentRules: {
   'CANVA.DESIGN.DEFAULT': {
     contentType: 'DESIGN',
     domain: 'canva.com',
-    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
-      'designId',
-      // TODO I am not clear what the two IDs map to.
-      // I have confirmed as much that the first one is not a user ID, i.e.
-      // If the same user created two designs, the first ID is not the same.
-      /^\/design\/([\w-]+\/[\w-]+)/u,
-      'https://canva.com/design/{{designId}}/view',
-    ),
+    extractContentInfo: (url) => {
+      const match =
+        /^\/design\/([\w-]+)(?:\/([\w-]+))?(?:\/(edit|view))?\/?$/u.exec(
+          url.pathname,
+        );
+
+      if (!match) {
+        return null;
+      }
+
+      const [, id, tokenOrMode, mode] = match;
+      const isMode = tokenOrMode === 'edit' || tokenOrMode === 'view';
+
+      if (isMode && mode) {
+        return null;
+      }
+
+      // Preserve the existing designId shape, including the optional share token.
+      const designId = tokenOrMode && !isMode ? `${id}/${tokenOrMode}` : id;
+
+      return {
+        designId,
+        url: `https://canva.com/design/${designId}/view`,
+      };
+    },
     formatUrl: ({ designId }) => {
       return `https://canva.com/design/${designId}/view`;
     },
     site: 'CANVA',
     tests: {
+      'https://canva.com/design/': null,
+      'https://canva.com/design/DAH_123': {
+        designId: 'DAH_123',
+        url: 'https://canva.com/design/DAH_123/view',
+      },
+      'https://canva.com/design/DAH_123/token/view/extra': null,
+      'https://canva.com/design/DAH_123/view': {
+        designId: 'DAH_123',
+        url: 'https://canva.com/design/DAH_123/view',
+      },
+      'https://canva.com/design/DAH_123/view/edit': null,
       'https://www.canva.com/design/DAC1xq2GJMk/hIMpX3mPUmYkmNshGT0ZEw/view?utm_content=DAC1xq2GJMk&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink':
         {
           designId: 'DAC1xq2GJMk/hIMpX3mPUmYkmNshGT0ZEw',
@@ -797,6 +832,18 @@ export const siteContentRules: {
           designId: 'DAE_HVNSl10/nZqb-SL59cV6Unj5Xd3y_w',
           url: 'https://canva.com/design/DAE_HVNSl10/nZqb-SL59cV6Unj5Xd3y_w/view',
         },
+      'https://www.canva.com/design/DAH_123/edit/?utm_source=share': {
+        designId: 'DAH_123',
+        url: 'https://canva.com/design/DAH_123/view',
+      },
+      'https://www.canva.com/design/DAH_123/share-token': {
+        designId: 'DAH_123/share-token',
+        url: 'https://canva.com/design/DAH_123/share-token/view',
+      },
+      'https://www.canva.com/design/DAH_123/share-token/edit': {
+        designId: 'DAH_123/share-token',
+        url: 'https://canva.com/design/DAH_123/share-token/view',
+      },
     },
     urlVariant: 'DEFAULT',
     weight: 100,
@@ -1093,6 +1140,38 @@ export const siteContentRules: {
           prototypeId: 'JMT7Yw56eiphRJKp1S9EEe',
           url: 'https://figma.com/proto/JMT7Yw56eiphRJKp1S9EEe',
         },
+    },
+    urlVariant: 'DEFAULT',
+    weight: 100,
+  },
+  'FIGMA.SLIDES.DEFAULT': {
+    contentType: 'SLIDES',
+    domain: 'figma.com',
+    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
+      'slidesId',
+      /^\/slides\/([a-zA-Z\d]+)(?:\/[^/]*)?\/?$/u,
+      'https://figma.com/slides/{{slidesId}}',
+    ),
+    formatUrl: ({ slidesId }) => {
+      return `https://figma.com/slides/${slidesId}`;
+    },
+    site: 'FIGMA',
+    tests: {
+      'https://figma.com/slides/': null,
+      'https://figma.com/slides/abc_123/Presentation': null,
+      'https://figma.com/slides/abc123': {
+        slidesId: 'abc123',
+        url: 'https://figma.com/slides/abc123',
+      },
+      'https://figma.com/slides/abc123/Presentation/extra': null,
+      'https://www.figma.com/slides/abc123/Presentation/': {
+        slidesId: 'abc123',
+        url: 'https://figma.com/slides/abc123',
+      },
+      'https://www.figma.com/slides/abc123/Presentation?node-id=1-2': {
+        slidesId: 'abc123',
+        url: 'https://figma.com/slides/abc123',
+      },
     },
     urlVariant: 'DEFAULT',
     weight: 100,
