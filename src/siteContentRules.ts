@@ -782,16 +782,21 @@ export const siteContentRules: {
     contentType: 'DESIGN',
     domain: 'canva.com',
     extractContentInfo: (url) => {
-      const match =
-        /^\/design\/([\w-]+)(?:\/([\w-]+))?(?:\/(edit|view))?\/?$/u.exec(
-          url.pathname,
-        );
+      const [, kind, id, tokenOrMode, mode, ...rest] = url.pathname
+        .replace(/\/$/u, '')
+        .split('/');
 
-      if (!match) {
+      if (
+        kind !== 'design' ||
+        !id ||
+        !/^[\w-]+$/u.test(id) ||
+        (tokenOrMode !== undefined && !/^[\w-]+$/u.test(tokenOrMode)) ||
+        (mode !== undefined && mode !== 'edit' && mode !== 'view') ||
+        rest.length > 0
+      ) {
         return null;
       }
 
-      const [, id, tokenOrMode, mode] = match;
       const isMode = tokenOrMode === 'edit' || tokenOrMode === 'view';
 
       if (isMode && mode) {
@@ -1147,11 +1152,25 @@ export const siteContentRules: {
   'FIGMA.SLIDES.DEFAULT': {
     contentType: 'SLIDES',
     domain: 'figma.com',
-    extractContentInfo: createIdFromFirstPathnameRegexMatchContentInfoExtractor(
-      'slidesId',
-      /^\/slides\/([a-zA-Z\d]+)(?:\/[^/]*)?\/?$/u,
-      'https://figma.com/slides/{{slidesId}}',
-    ),
+    extractContentInfo: (url) => {
+      const [, kind, slidesId, , ...rest] = url.pathname
+        .replace(/\/$/u, '')
+        .split('/');
+
+      if (
+        kind !== 'slides' ||
+        !slidesId ||
+        !/^[a-zA-Z\d]+$/u.test(slidesId) ||
+        rest.length > 0
+      ) {
+        return null;
+      }
+
+      return {
+        slidesId,
+        url: `https://figma.com/slides/${slidesId}`,
+      };
+    },
     formatUrl: ({ slidesId }) => {
       return `https://figma.com/slides/${slidesId}`;
     },
